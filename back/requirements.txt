@@ -1,0 +1,9 @@
+fastapi[all]
+python-dotenv
+SQLAlchemy
+passlib
+bcrypt==3.2.2
+psycopg2
+alembic
+python-jose[cryptography]
+python-decouple
