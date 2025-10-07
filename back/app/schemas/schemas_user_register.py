@@ -26,7 +26,7 @@ class UserRegisterResponseData(BaseModel):
 class UserRegisterSchemasResponse(BaseModel):
     status: int
     message: str
-    token: dict
+    token: str
 
 
 
