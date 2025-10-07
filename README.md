@@ -45,7 +45,7 @@ cd E-GP
 ```
 ### 2. Backend (API FastAPI)
 ```bash
-cd backend
+cd back
 python -m venv .venv
 source .venv/bin/activate   # (Linux/Mac)
 .venv\Scripts\activate      # (Windows)
