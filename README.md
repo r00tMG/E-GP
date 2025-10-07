@@ -42,10 +42,9 @@ Ce projet vise à proposer une **plateforme complète (Web + API + IA)** intégr
 ```bash
 git clone https://github.com/r00tMG/E-GP.git
 cd E-GP
-
----
-
+```
 ### 2. Backend (API FastAPI)
+```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate   # (Linux/Mac)
@@ -54,9 +53,11 @@ source .venv/bin/activate   # (Linux/Mac)
 pip install -r requirements.txt
 alembic upgrade head   # migration base de données
 uvicorn app.main:app --reload
+```
 
 ### 3. Frontend (React)
-
+```bash
 cd front
 npm install
 npm start
+```
