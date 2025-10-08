@@ -44,16 +44,43 @@ git clone https://github.com/r00tMG/E-GP.git
 cd E-GP
 ```
 ### 2. Backend (API FastAPI)
+## Prérequis
+
+- Python 3.11 installé sur votre machine
+
+- pip
+
+- virtualenv (optionnel mais recommandé)
+
+- Docker et Docker Compose (si vous utilisez Docker)
+
+## Option 1 : Lancement avec Python
 ```bash
 cd back
+# Linux / Mac
 python -m venv .venv
-source .venv/bin/activate   # (Linux/Mac)
-.venv\Scripts\activate      # (Windows)
+source .venv/bin/activate
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
 
 pip install -r requirements.txt
 alembic upgrade head   # migration base de données
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
+## Option 2 : Lancement avec Docker
+```bash
+docker compose up -d  #Lancement de tous les services définis dans le docker-compose.yml
+docker ps #Vérifiez les services
+docker compose down # arrêter les services docker
+
+```
+
+### Accès :
+
+- API : http://localhost:8000/docs
+- Base Postgres : localhost:5432
+- PgAdmin : http://localhost:5050
 
 ### 3. Frontend (React)
 ```bash
