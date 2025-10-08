@@ -12,6 +12,18 @@ services:
     volumes:
       - gp_data:/var/lib/postgresql/data
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: page_admin
+    environment:
+      - 'PGADMIN_DEFAULT_EMAIL=admin@gmail.com'
+      - 'PGADMIN_DEFAULT_PASSWORD=1234'
+      - 'PGADMIN_CONFIG_SERVER_MOD=False'
+    volumes:
+      - gp_data:/var/lib/postgresql/data
+    ports:
+      - '5050:80'
+
   backend:
     build: ./
     container_name: gp_backend
@@ -22,6 +34,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - pgadmin
     volumes:
       - ./:/app
     command: >
