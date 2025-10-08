@@ -42,6 +42,7 @@ Ce projet vise à proposer une **plateforme complète (Web + API + IA)** intégr
 ```bash
 git clone https://github.com/r00tMG/E-GP.git
 cd E-GP
+cp .env-example .env
 ```
 ### 2. Backend (API FastAPI)
 ## Prérequis
