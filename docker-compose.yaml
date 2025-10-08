@@ -11,7 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - gp_data:/var/lib/postgresql/data
-
+    networks:
+      - gp-net
   pgadmin:
     image: dpage/pgadmin4
     container_name: page_admin
