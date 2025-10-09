@@ -1,22 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.databases.database import get_db
+from app.dependencies_web import get_current_user
 from app.models import models
 from app.schemas.schemas_reservation_create import ReservationCreate, ReservationSchemaResponse, ReservationSchemaData, \
     AnnonceBase
 from app.schemas.schemas_users import UserResponse
 from app.security.token import role_required
 
-router=APIRouter(
+router = APIRouter(
     tags=["Reservation"]
 )
 
+
 @router.post("/reservations", response_model=ReservationSchemaResponse)
 async def create(
-    reservation_data: ReservationCreate,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(role_required("client")),
+        reservation_data: ReservationCreate,
+        db: Session = Depends(get_db),
+        current_user: models.User = Depends(role_required("client")),
 ):
     print(f"user in reservation: {current_user.id}, {current_user.email}, {current_user.role}")
     # Vérifier si l’annonce existe
@@ -83,13 +85,24 @@ async def create(
             email=current_user.email,
             role=current_user.role,
         ),
-        total_price = reservation.total_price,
-        status = reservation.status,
-        items = reservation.items,
-        special_items = reservation.special_items,
+        total_price=reservation.total_price,
+        status=reservation.status,
+        items=reservation.items,
+        special_items=reservation.special_items,
     )
     return {
         "status": status.HTTP_201_CREATED,
         "message": "Réservation créée avec succès",
         "reservation": response_date
     }
+
+@router.get("/reservations")
+async def index(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    reservations = (db.query(models.Reservation).options(
+        joinedload(
+            models.Reservation.user,
+            models.Reservation.annonce,
+            models.Reservation.items,
+            models.Reservation.special_items))
+                    .filter(models.Reservation.user.id == current_user.id).all())
+    return reservations

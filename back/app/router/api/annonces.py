@@ -23,7 +23,8 @@ router = APIRouter(
 async def create(
         request: Request,
         payload: AnnonceCreateSchemas,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        currentUser:TokenData = Depends(role_required("gp"))
 ):
     if (
             not payload.destination
@@ -79,7 +80,8 @@ async def create(
 async def delete(
         request: Request,
         id: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        currentUser:TokenData = Depends(role_required("gp"))
 ):
     annonce = db.query(models.Annonce).filter(models.Annonce.id == id).first()
     if not annonce:
@@ -119,7 +121,8 @@ async def update(
         request: Request,
         id: int,
         payload: AnnonceUpdateSchemas,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+currentUser:TokenData = Depends(role_required("gp"))
 ):
     query = db.query(models.Annonce).filter(models.Annonce.id == id)
     annonce = query.first()
@@ -157,7 +160,9 @@ async def update(
 @router.get("/annonces_by_gp", response_model=AnnonceGetSchemasResponse)
 async def indexByGp(
         gp_id:int=8,
-        db:Session=Depends(get_db)):
+        db:Session=Depends(get_db),
+currentUser:TokenData = Depends(role_required("gp"))
+):
     annonces = db.query(models.Annonce).filter(models.Annonce.gp_id == gp_id).all()
     if not annonces:
         raise HTTPException(
@@ -178,9 +183,8 @@ async def index(
         search_origin: Optional[str]=Query(None),
         search_destination: Optional[str]=Query(None),
         db:Session=Depends(get_db),
-        currentUser:TokenData = Depends(role_required("gp"))
+
 ):
-    print(currentUser)
     query = db.query(models.Annonce).options(joinedload(models.Annonce.gp))
 
     filters = []
