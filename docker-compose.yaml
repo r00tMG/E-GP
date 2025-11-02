@@ -28,15 +28,17 @@ services:
       - '5050:80'
 
   backend:
-    build: ./
+    build: ./back/
     container_name: gp_backend
     restart: always
     env_file:
       - .env
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://gp_user:gp_pass@db:5432/gp_db
     volumes:
-      - ./:/app
+      - ./back/:/app
     networks:
       - gp-net
     depends_on:

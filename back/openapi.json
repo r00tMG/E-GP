@@ -447,6 +447,30 @@
       }
     },
     "/api/reservations": {
+      "get": {
+        "tags": [
+          "Reservation"
+        ],
+        "summary": "Index",
+        "operationId": "index_api_reservations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Reservation"
@@ -484,7 +508,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     }
   },
@@ -510,6 +539,10 @@
             "type": "number",
             "title": "Prix Par Kilo"
           },
+          "prix_par_piece": {
+            "type": "number",
+            "title": "Prix Par Piece"
+          },
           "destination": {
             "type": "string",
             "title": "Destination"
@@ -525,6 +558,7 @@
           "date_depart",
           "date_arrivee",
           "prix_par_kilo",
+          "prix_par_piece",
           "destination",
           "origin"
         ],
@@ -779,6 +813,10 @@
             "type": "number",
             "title": "Prix Du Kilo"
           },
+          "prix_par_piece": {
+            "type": "number",
+            "title": "Prix Par Piece"
+          },
           "origin": {
             "type": "string",
             "title": "Origin"
@@ -796,6 +834,7 @@
           "date_arrivee",
           "description",
           "prix_du_kilo",
+          "prix_par_piece",
           "origin",
           "destination"
         ],
@@ -1281,8 +1320,7 @@
             "title": "Message"
           },
           "token": {
-            "additionalProperties": true,
-            "type": "object",
+            "type": "string",
             "title": "Token"
           }
         },

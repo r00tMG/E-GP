@@ -1,12 +1,14 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
 
 from app.databases.database import get_db
-from app.dependencies_web import get_current_user
 from app.models import models
 from app.schemas.schemas_reservation_create import ReservationCreate, ReservationSchemaResponse, ReservationSchemaData, \
     AnnonceBase
 from app.schemas.schemas_users import UserResponse
+from app.security.oauth2 import get_current_user
 from app.security.token import role_required
 
 router = APIRouter(
@@ -70,7 +72,7 @@ async def create(
     db.add(reservation)
     db.commit()
     db.refresh(reservation)
-    response_date = ReservationSchemaData(
+    response_data = ReservationSchemaData(
         annonce=AnnonceBase(
             id=annonce.id,
             date_depart=annonce.date_depart,
@@ -93,16 +95,39 @@ async def create(
     return {
         "status": status.HTTP_201_CREATED,
         "message": "Réservation créée avec succès",
-        "reservation": response_date
+        "reservation": response_data
     }
 
 @router.get("/reservations")
-async def index(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
-    reservations = (db.query(models.Reservation).options(
-        joinedload(
-            models.Reservation.user,
-            models.Reservation.annonce,
-            models.Reservation.items,
-            models.Reservation.special_items))
-                    .filter(models.Reservation.user.id == current_user.id).all())
-    return reservations
+async def indexbyuser(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    reservations = (db.query(models.Reservation)
+    .options(
+        joinedload(models.Reservation.user),
+            joinedload(models.Reservation.annonce),
+            joinedload(models.Reservation.items),
+            joinedload(models.Reservation.special_items)
+    ).filter(models.Reservation.user_id == current_user.id).all())
+
+    return {
+        "status": status.HTTP_200_OK,
+        "message": "Réservation créée avec succès",
+        "reservation": reservations
+    }
+
+@router.get("/admin/reservations")
+async def index(db: Session = Depends(get_db), current_user=Depends(role_required("admin"))):
+    reservations = (db.query(models.Reservation)
+    .options(
+        joinedload(models.Reservation.user),
+            joinedload(models.Reservation.annonce),
+            joinedload(models.Reservation.items),
+            joinedload(models.Reservation.special_items)
+    ).all())
+
+    return {
+        "status": status.HTTP_200_OK,
+        "message": "Réservation créée avec succès",
+        "reservation": reservations
+    }
+
+#@router.post()

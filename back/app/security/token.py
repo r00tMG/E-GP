@@ -9,7 +9,6 @@ from sqlalchemy.orm import Session
 from app.databases.database import get_db
 from app.models import models
 from app.schemas.schemas_jwt_token import TokenData
-from app.security.oauth2 import get_current_user
 
 SECRET_KEY=config("SECRET")
 ALGORITHM=config("ALGORITHM")
@@ -52,6 +51,8 @@ def verify_token(token:str, credentials_exception, db):
         raise credentials_exception
 
 def role_required(*allowed_roles):
+    from app.security.oauth2 import get_current_user
+
     def wrapper(current_user: TokenData = Depends(get_current_user)):
         if current_user.role not in allowed_roles:
             raise HTTPException(

@@ -20,6 +20,7 @@ class User(Base):
     phone = Column(String)
     password = Column(String)
     role = Column(Enum(UserRole))
+    stripe_account_id=Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     #Relations
@@ -69,6 +70,7 @@ class Reservation(Base):
     annonce = relationship("Annonce", back_populates="reservations")
     items = relationship("ReservationItem", back_populates="reservation", cascade="all, delete-orphan")
     special_items = relationship("ReservationSpecialItem", back_populates="reservation", cascade="all, delete-orphan")
+    payment = relationship("Payment", back_populates="reservation", uselist=False, cascade="all, delete-orphan")
 
 
 class ReservationItem(Base):
@@ -95,4 +97,21 @@ class ReservationSpecialItem(Base):
     reservation = relationship("Reservation", back_populates="special_items")
 
 
+class PaymentStatus(str, enum.Enum):
+    PENDING = "pending"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    REFUNDED = "refunded"
 
+
+class Payment(Base):
+    __tablename__ = "payments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    reservation_id = Column(Integer, ForeignKey("reservations.id", ondelete="CASCADE"), nullable=False)
+    amount = Column(Numeric(10, 2))
+    commission = Column(Numeric(10, 2))
+    status = Column(Enum(PaymentStatus), default=PaymentStatus.PENDING)
+    stripe_session_id = Column(String, unique=True)
+    created_at = Column(DateTime, server_default=func.now())
+    reservation = relationship("Reservation", back_populates="payment")
