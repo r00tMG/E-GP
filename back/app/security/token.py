@@ -34,7 +34,7 @@ def verify_token(token:str, credentials_exception, db):
         last_name:str = payload.get("last_name")
         last_name:str = payload.get("last_name")
         #"id":user.id, "first_name":user.first_name, "last_name":user.last_name, "created_at":user.created_at
-        print(f"on verify token function, email: {email}, role: {role}")
+        #print(f"on verify token function, email: {email}, role: {role}")
         if email is None or role is None:
             raise credentials_exception
         user = db.query(models.User).filter(models.User.email == email).first()
@@ -45,7 +45,7 @@ def verify_token(token:str, credentials_exception, db):
         user.role = role
         user.id = id
         token_data = TokenData(id=id, email=email, role=role)
-        print(f"on verify token function, token data: {token_data}")
+        #print(f"on verify token function, token data: {token_data}")
         return token_data
     except JWTError:
         raise credentials_exception
@@ -55,6 +55,7 @@ def role_required(*allowed_roles):
 
     def wrapper(current_user: TokenData = Depends(get_current_user)):
         if current_user.role not in allowed_roles:
+            print("Role de l'utilisateur: ",current_user.role, current_user.email)
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Permission denied"

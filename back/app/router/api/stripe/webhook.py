@@ -66,6 +66,19 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         payment = db.query(models.Payment).filter(models.Payment.stripe_session_id == session_id).first()
         if payment:
             payment.status = "failed"
+            reservation = db.query(models.Reservation).with_for_update().filter(
+                models.Reservation.id == int(payment.reservation_id)).first()
+            if reservation and reservation.status == models.StatusReservation.PENDING:
+                # restaurer les kilos dans l'annonce
+                annonce = db.query(models.Annonce).with_for_update().filter(
+                    models.Annonce.id == reservation.annonce_id).first()
+                if annonce:
+                    annonce.kilos_disponibles = (
+                                float(annonce.kilos_disponibles or 0) + float(reservation.kilos_reserved or 0))
+                    db.add(annonce)
+                # annuler la réservation
+                reservation.status = models.StatusReservation.CANCELLED
+                db.add(reservation)
             db.commit()
             print(f" Paiement échoué pour session {session_id}")
 

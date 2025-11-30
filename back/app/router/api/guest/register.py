@@ -19,7 +19,7 @@ async def register(
     payload: UserRegisterSchemas = Body(...),
     db: Session = Depends(get_db)
 ):
-    # Vérification de l'input
+    # Vérification de l'notebooks
     if payload.password != payload.confirm_password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

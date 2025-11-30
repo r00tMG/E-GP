@@ -13,6 +13,7 @@ class AnnonceCreateSchemas(BaseModel):
     date_arrivee:datetime
     description:str
     prix_du_kilo:float
+    prix_par_piece:float
     origin:str
     destination:str
 
@@ -23,6 +24,7 @@ class AnnonceCreateSchemasData(BaseModel):
     date_arrivee:datetime
     description:str
     prix_du_kilo:float
+    prix_par_piece:float
     origin:str
     destination:str
 
@@ -61,6 +63,7 @@ class AnnonceUpdateSchemas(BaseModel):
     date_arrivee:Optional[datetime] = None
     description:Optional[str] = None
     prix_du_kilo:Optional[float] = None
+    prix_par_piece:Optional[float] = None
     origin:Optional[str] = None
     destination:Optional[str] = None
 
@@ -70,6 +73,7 @@ class AnnonceUpdateSchemasData(BaseModel):
     date_arrivee:datetime
     description:str
     prix_du_kilo:float
+    prix_par_piece:float
     origin:str
     destination:str
 
@@ -85,6 +89,7 @@ class AnnonceGetSchemasDatas(BaseModel):
     date_arrivee: datetime
     description: str
     prix_du_kilo: float
+    prix_par_piece: float
     origin: str
     destination: str
     gp:Optional[UserResponse]

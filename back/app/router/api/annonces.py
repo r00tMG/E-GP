@@ -12,6 +12,7 @@ from app.schemas.schemas_annonce_create import AnnonceCreateSchemas, AnnonceCrea
     AnnonceCreateSchemasData, AnnonceDeleteSchemaResponce, AnnonceShowSchemaResponse, AnnonceUpdateSchemaResponse, \
     AnnonceUpdateSchemas, AnnonceUpdateSchemasData, AnnonceGetSchemasResponse
 from app.schemas.schemas_jwt_token import TokenData
+from app.security.oauth2 import get_current_user
 from app.security.token import role_required
 
 router = APIRouter(
@@ -19,12 +20,13 @@ router = APIRouter(
 
 )
 
+
 @router.post("/annonces", response_model=AnnonceCreateSchemasResponse)
 async def create(
         request: Request,
         payload: AnnonceCreateSchemas,
         db: Session = Depends(get_db),
-        currentUser:TokenData = Depends(role_required("gp"))
+        currentUser: TokenData = Depends(role_required("gp"))
 ):
     if (
             not payload.destination
@@ -33,6 +35,7 @@ async def create(
             or not payload.date_arrivee
             or not payload.kilos_disponibles
             or not payload.prix_du_kilo
+            or not payload.prix_par_piece
             or not payload.description
     ):
         raise HTTPException(
@@ -46,12 +49,13 @@ async def create(
         )
     user_id = request.cookies.get("user_id")
     new_annonce = Annonce(
-        gp_id=1,
+        gp_id=currentUser.id,
         kilos_disponibles=payload.kilos_disponibles,
         date_depart=payload.date_depart,
         date_arrivee=payload.date_arrivee,
         description=payload.description,
         prix_du_kilo=payload.prix_du_kilo,
+        prix_par_piece=payload.prix_par_piece,
         origin=payload.origin,
         destination=payload.destination,
 
@@ -66,6 +70,7 @@ async def create(
         date_arrivee=new_annonce.date_arrivee,
         description=new_annonce.description,
         prix_du_kilo=new_annonce.prix_du_kilo,
+        prix_par_piece=new_annonce.prix_par_piece,
         origin=new_annonce.origin,
         destination=new_annonce.destination
     )
@@ -81,7 +86,7 @@ async def delete(
         request: Request,
         id: int,
         db: Session = Depends(get_db),
-        currentUser:TokenData = Depends(role_required("gp"))
+        currentUser: TokenData = Depends(role_required("gp"))
 ):
     annonce = db.query(models.Annonce).filter(models.Annonce.id == id).first()
     if not annonce:
@@ -122,7 +127,7 @@ async def update(
         id: int,
         payload: AnnonceUpdateSchemas,
         db: Session = Depends(get_db),
-currentUser:TokenData = Depends(role_required("gp"))
+        currentUser: TokenData = Depends(role_required("gp"))
 ):
     query = db.query(models.Annonce).filter(models.Annonce.id == id)
     annonce = query.first()
@@ -148,6 +153,7 @@ currentUser:TokenData = Depends(role_required("gp"))
         date_arrivee=annonce.date_arrivee,
         description=annonce.description,
         prix_du_kilo=annonce.prix_du_kilo,
+        prix_par_piece=annonce.prix_par_piece,
         origin=annonce.origin,
         destination=annonce.destination,
     )
@@ -157,11 +163,12 @@ currentUser:TokenData = Depends(role_required("gp"))
         "annonce": response_data
     }
 
+
 @router.get("/annonces_by_gp", response_model=AnnonceGetSchemasResponse)
 async def indexByGp(
-        gp_id:int=8,
-        db:Session=Depends(get_db),
-currentUser:TokenData = Depends(role_required("gp"))
+        gp_id: int = 8,
+        db: Session = Depends(get_db),
+        currentUser: TokenData = Depends(role_required("gp"))
 ):
     annonces = db.query(models.Annonce).filter(models.Annonce.gp_id == gp_id).all()
     if not annonces:
@@ -170,19 +177,20 @@ currentUser:TokenData = Depends(role_required("gp"))
             detail=f"Ce gp n'a pas d'annonces lui correspondant: {gp_id}"
         )
     return {
-        "status":status.HTTP_200_OK,
-        "message":"Liste des annonces",
-        "annonces":annonces
+        "status": status.HTTP_200_OK,
+        "message": "Liste des annonces",
+        "annonces": annonces
     }
 
 
 @router.get("/annonces", response_model=AnnonceGetSchemasResponse)
 async def index(
-        search_date_depart: Optional[datetime]=Query(None),
-        search_date_arrivee: Optional[datetime]=Query(None),
-        search_origin: Optional[str]=Query(None),
-        search_destination: Optional[str]=Query(None),
-        db:Session=Depends(get_db),
+        search_date_depart: Optional[datetime] = Query(None),
+        search_date_arrivee: Optional[datetime] = Query(None),
+        search_origin: Optional[str] = Query(None),
+        search_destination: Optional[str] = Query(None),
+        db: Session = Depends(get_db),
+        current_user=Depends(get_current_user)
 
 ):
     query = db.query(models.Annonce).options(joinedload(models.Annonce.gp))
@@ -200,15 +208,12 @@ async def index(
 
     if filters:
         query = query.filter(and_(*filters))
-       
-    #annonces = query.all()
+
+    # annonces = query.all()
     annonces = query.order_by(models.Annonce.id.desc()).all()
 
     return {
-        "status":status.HTTP_200_OK,
-        "message":"Liste des annonces",
-        "annonces":annonces
+        "status": status.HTTP_200_OK,
+        "message": "Liste des annonces",
+        "annonces": annonces
     }
-
-
-

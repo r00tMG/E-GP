@@ -40,6 +40,7 @@ class Annonce(Base):
     origin=Column(String)
     destination=Column(String)
 
+
     #Relations
     gp = relationship("User", back_populates="annonces")
     reservations = relationship("Reservation", back_populates="annonce")
@@ -55,7 +56,7 @@ class Reservation(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     annonce_id = Column(Integer, ForeignKey("annonces.id", ondelete="CASCADE"), nullable=False)
-
+    expired_at = Column(DateTime, nullable=True)
     # subtotal = Column(Numeric(10, 2), default=0)  # total HT
     # commission = Column(Numeric(10, 2), default=0)  # commission plateforme
     # tva = Column(Numeric(10, 2), default=0)  # TVA sur la commission

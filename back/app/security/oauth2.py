@@ -10,6 +10,7 @@ from app.security import token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 async def get_current_user(data: Annotated[str, Depends(oauth2_scheme)], db:Session=Depends(get_db)):
+    #print("Data: ", data)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

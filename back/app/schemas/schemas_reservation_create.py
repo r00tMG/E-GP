@@ -46,6 +46,7 @@ class AnnonceBase(BaseModel):
 
 
 class ReservationSchemaData(BaseModel):
+    reservation_id: int
     annonce: Optional[AnnonceBase]
     user: Optional[UserResponse]
     total_price:float

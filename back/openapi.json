@@ -87,6 +87,68 @@
         }
       }
     },
+    "/api/home": {
+      "get": {
+        "tags": [
+          "Guest"
+        ],
+        "summary": "Index",
+        "operationId": "index_api_home_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnnonceGetSchemasResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/set-role": {
+      "post": {
+        "summary": "Set Role Endpoint",
+        "operationId": "set_role_endpoint_api_set_role_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "get": {
+        "summary": "Logout",
+        "operationId": "logout_api_logout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
     "/api/annonces": {
       "post": {
         "tags": [
@@ -451,8 +513,8 @@
         "tags": [
           "Reservation"
         ],
-        "summary": "Index",
-        "operationId": "index_api_reservations_get",
+        "summary": "Indexbyuser",
+        "operationId": "indexbyuser_api_reservations_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -514,6 +576,176 @@
             "OAuth2PasswordBearer": []
           }
         ]
+      }
+    },
+    "/api/admin/reservations": {
+      "get": {
+        "tags": [
+          "Reservation"
+        ],
+        "summary": "Index",
+        "operationId": "index_api_admin_reservations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Home",
+        "operationId": "home__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web/register": {
+      "get": {
+        "summary": "Register",
+        "operationId": "register_web_register_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Register",
+        "operationId": "register_web_register_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_register_web_register_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web/login": {
+      "get": {
+        "summary": "Login",
+        "operationId": "login_web_login_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Login",
+        "operationId": "login_web_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_web_login_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web/logout": {
+      "get": {
+        "summary": "Logout",
+        "operationId": "logout_web_logout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -1020,6 +1252,52 @@
           "destination"
         ],
         "title": "AnnonceUpdateSchemasData"
+      },
+      "Body_login_web_login_post": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "Body_login_web_login_post"
+      },
+      "Body_register_web_register_post": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "confirm_password": {
+            "type": "string",
+            "title": "Confirm Password"
+          },
+          "phone": {
+            "type": "string",
+            "title": "Phone"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "confirm_password",
+          "phone"
+        ],
+        "title": "Body_register_web_register_post"
       },
       "HTTPValidationError": {
         "properties": {
