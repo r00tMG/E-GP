@@ -229,24 +229,51 @@ async def create_checkout_session(
 
         # 4) préparer line_items
         line_items = []
+        # for item in reservation.items:
+        #     line_items.append({
+        #         "price_data": {
+        #             "currency": "eur",
+        #             "unit_amount": int(float(item.price_per_kg) * 100),
+        #             "product_data": {"name": f"{item.item_name} ({item.weight} kg)"},
+        #         },
+        #         "quantity": 1,
+        #     })
         for item in reservation.items:
             line_items.append({
                 "price_data": {
-                    "currency": "eur",
-                    "unit_amount": int(float(item.price_per_kg) * 100),
-                    "product_data": {"name": f"{item.item_name} ({item.weight} kg)"},
+                    "currency": "xof",
+                    #"unit_amount": int(float(item.price_per_kg) * 100),
+                    "unit_amount": int(float(item.price_per_kg)),
+
+                    "product_data": {
+                        "name": f"{item.item_name}"
+                    },
                 },
-                "quantity": 1,
+                "quantity": int(item.weight),  # ✅ LE POIDS EST LA QUANTITÉ
             })
+
         for s_item in reservation.special_items:
             line_items.append({
                 "price_data": {
-                    "currency": "eur",
-                    "unit_amount": int(float(s_item.price_per_piece) * 100),
-                    "product_data": {"name": f"{s_item.item_name} (x{s_item.quantity})"},
+                    "currency": "xof",
+                    #"unit_amount": int(float(s_item.price_per_piece) * 100),
+                    "unit_amount": int(float(s_item.price_per_piece)),
+                    "product_data": {
+                        "name": f"{s_item.item_name}"
+                    },
                 },
-                "quantity": 1,
+                "quantity": s_item.quantity,  # ✅
             })
+
+        # for s_item in reservation.special_items:
+        #     line_items.append({
+        #         "price_data": {
+        #             "currency": "eur",
+        #             "unit_amount": int(float(s_item.price_per_piece) * 100),
+        #             "product_data": {"name": f"{s_item.item_name} (x{s_item.quantity})"},
+        #         },
+        #         "quantity": 1,
+        #     })
         if not line_items:
             line_items = [{
                 "price_data": {
@@ -256,6 +283,17 @@ async def create_checkout_session(
                 },
                 "quantity": 1,
             }]
+
+        stripe_total = sum(
+            item["price_data"]["unit_amount"] * item["quantity"]
+            for item in line_items
+        )
+
+        if stripe_total != int(reservation.total_price):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Incohérence Stripe={stripe_total} vs DB={reservation.total_price}"
+            )
 
         # 5) création session Stripe (gère connect optionnel)
         metadata = {
@@ -296,7 +334,7 @@ async def create_checkout_session(
             reservation_id=reservation.id,
             amount=total_amount,
             commission=commission_amount,
-            status="pending",
+            status=models.PaymentStatus.PENDING,
             stripe_session_id=session.id,
             #receiver_stripe_account=gp_stripe_account if gp_stripe_account else None
         )

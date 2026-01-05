@@ -11,3 +11,7 @@ python-decouple
 stripe
 reportlab
 yagmail
+jupyterlab
+pandas
+seaborn
+scikit-learn

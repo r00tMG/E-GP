@@ -604,136 +604,23 @@
         ]
       }
     },
-    "/": {
-      "get": {
-        "summary": "Home",
-        "operationId": "home__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/web/register": {
-      "get": {
-        "summary": "Register",
-        "operationId": "register_web_register_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/stripe/create-checkout-session": {
       "post": {
-        "summary": "Register",
-        "operationId": "register_web_register_post",
+        "tags": [
+          "Stripe"
+        ],
+        "summary": "Create Checkout Session",
+        "operationId": "create_checkout_session_api_stripe_create_checkout_session_post",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_register_web_register_post"
+                "$ref": "#/components/schemas/PaymentRequest"
               }
             }
           },
           "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/web/login": {
-      "get": {
-        "summary": "Login",
-        "operationId": "login_web_login_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Login",
-        "operationId": "login_web_login_post",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_login_web_login_post"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/web/logout": {
-      "get": {
-        "summary": "Logout",
-        "operationId": "logout_web_logout_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -744,8 +631,23 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     }
   },
@@ -820,6 +722,10 @@
             "type": "number",
             "title": "Prix Du Kilo"
           },
+          "prix_par_piece": {
+            "type": "number",
+            "title": "Prix Par Piece"
+          },
           "origin": {
             "type": "string",
             "title": "Origin"
@@ -836,6 +742,7 @@
           "date_arrivee",
           "description",
           "prix_du_kilo",
+          "prix_par_piece",
           "origin",
           "destination"
         ],
@@ -869,6 +776,10 @@
             "type": "number",
             "title": "Prix Du Kilo"
           },
+          "prix_par_piece": {
+            "type": "number",
+            "title": "Prix Par Piece"
+          },
           "origin": {
             "type": "string",
             "title": "Origin"
@@ -886,6 +797,7 @@
           "date_arrivee",
           "description",
           "prix_du_kilo",
+          "prix_par_piece",
           "origin",
           "destination"
         ],
@@ -959,6 +871,10 @@
             "type": "number",
             "title": "Prix Du Kilo"
           },
+          "prix_par_piece": {
+            "type": "number",
+            "title": "Prix Par Piece"
+          },
           "origin": {
             "type": "string",
             "title": "Origin"
@@ -986,6 +902,7 @@
           "date_arrivee",
           "description",
           "prix_du_kilo",
+          "prix_par_piece",
           "origin",
           "destination",
           "gp"
@@ -1182,6 +1099,17 @@
             ],
             "title": "Prix Du Kilo"
           },
+          "prix_par_piece": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prix Par Piece"
+          },
           "origin": {
             "anyOf": [
               {
@@ -1232,6 +1160,10 @@
             "type": "number",
             "title": "Prix Du Kilo"
           },
+          "prix_par_piece": {
+            "type": "number",
+            "title": "Prix Par Piece"
+          },
           "origin": {
             "type": "string",
             "title": "Origin"
@@ -1248,56 +1180,11 @@
           "date_arrivee",
           "description",
           "prix_du_kilo",
+          "prix_par_piece",
           "origin",
           "destination"
         ],
         "title": "AnnonceUpdateSchemasData"
-      },
-      "Body_login_web_login_post": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "title": "Email"
-          },
-          "password": {
-            "type": "string",
-            "title": "Password"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
-        "title": "Body_login_web_login_post"
-      },
-      "Body_register_web_register_post": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "title": "Email"
-          },
-          "password": {
-            "type": "string",
-            "title": "Password"
-          },
-          "confirm_password": {
-            "type": "string",
-            "title": "Confirm Password"
-          },
-          "phone": {
-            "type": "string",
-            "title": "Phone"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "password",
-          "confirm_password",
-          "phone"
-        ],
-        "title": "Body_register_web_register_post"
       },
       "HTTPValidationError": {
         "properties": {
@@ -1311,6 +1198,19 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "PaymentRequest": {
+        "properties": {
+          "reservation_id": {
+            "type": "integer",
+            "title": "Reservation Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reservation_id"
+        ],
+        "title": "PaymentRequest"
       },
       "ReservationCreate": {
         "properties": {
@@ -1375,6 +1275,10 @@
       },
       "ReservationSchemaData": {
         "properties": {
+          "reservation_id": {
+            "type": "integer",
+            "title": "Reservation Id"
+          },
           "annonce": {
             "anyOf": [
               {
@@ -1433,6 +1337,7 @@
         },
         "type": "object",
         "required": [
+          "reservation_id",
           "annonce",
           "user",
           "total_price",

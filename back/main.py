@@ -13,7 +13,7 @@ from app.router.api import reservations, annonces
 from app.router.api.guest import register, home, setRole
 from app.router.api.guest import login
 from app.router.api.guest import logout
-from app.router.api.stripe import payments
+from app.router.api.stripe import payments, webhook
 from app.security.oauth2 import get_current_user
 
 load_dotenv()
@@ -62,5 +62,9 @@ app.include_router(reservations.router, prefix="/api", dependencies=[Depends(get
 
 # Paiement
 app.include_router(payments.router, prefix="/api", dependencies=[Depends(get_current_user)])
-
+app.include_router(
+    webhook.router,
+    #prefix="/api",
+    #dependencies=[Depends(get_current_user)]
+)
 
