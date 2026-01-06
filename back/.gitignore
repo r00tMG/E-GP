@@ -3,5 +3,6 @@
 .env
 __pycache__
 migrations
-mls/datas/ml_annonce_demand_dataset.csv
+mls/datas/prediction_disponibilite_et_demande.csv
 invoices/
+mls/models
