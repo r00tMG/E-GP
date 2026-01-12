@@ -8,6 +8,7 @@ from sqlalchemy.sql.functions import func
 from app.databases.database import get_db
 from app.models import models
 from app.models.models import Annonce
+from app.router.api.predictions import compute_features, predict_next_day
 from app.schemas.schemas_annonce_create import AnnonceCreateSchemas, AnnonceCreateSchemasResponse, \
     AnnonceCreateSchemasData, AnnonceDeleteSchemaResponce, AnnonceShowSchemaResponse, AnnonceUpdateSchemaResponse, \
     AnnonceUpdateSchemas, AnnonceUpdateSchemasData, AnnonceGetSchemasResponse
@@ -108,16 +109,24 @@ async def show(
         id: int,
         db: Session = Depends(get_db)
 ):
+    print("test show")
     annonce = db.query(models.Annonce).filter(models.Annonce.id == id).first()
     if not annonce:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Une annonce avec cet id n'existe pas: {id}"
         )
+    snapshot = datetime.utcnow()
+
+    features = compute_features(db, annonce, snapshot)
+    print("Features: ", features)
+    prediction = predict_next_day(features)
+    print("Predictions: ",prediction)
     return {
         "status": status.HTTP_200_OK,
         "message": "Les informations d'une annonce",
-        "annonce": annonce
+        "annonce": annonce,
+        "prediction": prediction
     }
 
 
@@ -176,6 +185,7 @@ async def indexByGp(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Ce gp n'a pas d'annonces lui correspondant: {gp_id}"
         )
+
     return {
         "status": status.HTTP_200_OK,
         "message": "Liste des annonces",
@@ -193,7 +203,8 @@ async def index(
         current_user=Depends(get_current_user)
 
 ):
-    query = db.query(models.Annonce).options(joinedload(models.Annonce.gp))
+    now = datetime.utcnow()
+    query = db.query(models.Annonce).options(joinedload(models.Annonce.gp)).filter(models.Annonce.date_depart >= now)
 
     filters = []
 

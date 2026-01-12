@@ -33,18 +33,18 @@ def build_ml_dataset(db: Session):
 
         for snapshot in generate_snapshots(snapshot_start, snapshot_end):
 
-            # 1️⃣ kilos réservés AVANT snapshot
+            # kilos réservés AVANT snapshot
             reserved_before = (
                 db.query(func.coalesce(func.sum(models.ReservationItem.weight), 0))
                 .join(models.Reservation)
                 .filter(
                     models.Reservation.annonce_id == annonce.id,
                     models.Reservation.created_at < snapshot,
-                    models.Reservation.status == "CONFIRMED"
+                    #models.Reservation.status == "CONFIRMED"
                 )
                 .scalar()
             )
-
+            print("reserved fe:", reserved_before)
             kilos_total = annonce.kilos_disponibles or 0
             kilos_remaining = max(kilos_total - reserved_before, 0)
 
@@ -53,7 +53,7 @@ def build_ml_dataset(db: Session):
                 if kilos_total > 0 else 0
             )
 
-            # 2️⃣ TARGET : kilos réservés LE LENDEMAIN
+            # TARGET : kilos réservés LE LENDEMAIN
             kilos_booked_next_day = (
                 db.query(func.coalesce(func.sum(models.ReservationItem.weight), 0))
                 .join(models.Reservation)
@@ -61,7 +61,7 @@ def build_ml_dataset(db: Session):
                     models.Reservation.annonce_id == annonce.id,
                     models.Reservation.created_at >= snapshot,
                     models.Reservation.created_at < snapshot + timedelta(days=1),
-                    models.Reservation.status == "CONFIRMED"
+                    #models.Reservation.status == "CONFIRMED"
                 )
                 .scalar()
             )
@@ -72,7 +72,7 @@ def build_ml_dataset(db: Session):
                 kilos_remaining
             )
 
-            # 3️⃣ historique
+            # historique
             hist_7d = (
                 db.query(func.coalesce(func.sum(models.ReservationItem.weight), 0))
                 .join(models.Reservation)
@@ -80,7 +80,7 @@ def build_ml_dataset(db: Session):
                     models.Reservation.annonce_id == annonce.id,
                     models.Reservation.created_at >= snapshot - timedelta(days=7),
                     models.Reservation.created_at < snapshot,
-                    models.Reservation.status == "CONFIRMED"
+                    #models.Reservation.status == "CONFIRMED"
                 )
                 .scalar()
             )
@@ -92,12 +92,12 @@ def build_ml_dataset(db: Session):
                     models.Reservation.annonce_id == annonce.id,
                     models.Reservation.created_at >= snapshot - timedelta(days=30),
                     models.Reservation.created_at < snapshot,
-                    models.Reservation.status == "CONFIRMED"
+                    #models.Reservation.status == "CONFIRMED"
                 )
                 .scalar()
             )
 
-            # 4️⃣ popularité route
+            # popularité route
             route_30d = (
                 db.query(func.count(models.Reservation.id))
                 .join(models.Annonce)
@@ -105,12 +105,12 @@ def build_ml_dataset(db: Session):
                     models.Annonce.origin == annonce.origin,
                     models.Annonce.destination == annonce.destination,
                     models.Reservation.created_at >= snapshot - timedelta(days=30),
-                    models.Reservation.status == "CONFIRMED"
+                    #models.Reservation.status == "CONFIRMED"
                 )
                 .scalar()
             )
 
-            # 5️⃣ temps
+            # temps
             days_until_departure = (annonce.date_depart - snapshot).days
 
             rows.append({

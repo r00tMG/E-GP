@@ -16,12 +16,13 @@ const error = ref(null);
 
 const submitting = ref(false);
 const successMessage = ref('');
+const prediction = ref(null);
 
 // Formulaire réservation
 const kilosItems = ref([]);
 const specialItems = ref([]);
 
-const nbKgInput = ref(0); // champ rapide si tu veux un champ simple
+const nbKgInput = ref(0); 
 const qtyInput = ref(1);
 
 // utilitaires date/heure
@@ -43,8 +44,11 @@ async function fetchAnnonce() {
     const resp = await axios.get(`/annonce/${annonceId}`, {
       headers: token.value ? { Authorization: `Bearer ${token.value}` } : {}
     });
-    // Ajuste selon la shape de ta réponse. Ici j'assume resp.data.annonce ou resp.data
+    console.log(resp?.data);
+    
     annonce.value = resp?.data?.annonce ?? resp?.data ?? null;
+    prediction.value = resp?.data?.prediction ?? null;
+
     if (!annonce.value) {
       throw new Error("Annonce introuvable dans la réponse");
     }
@@ -56,7 +60,6 @@ async function fetchAnnonce() {
   }
 }
 
-// Ajout / suppression d'items
 function addKiloItem() {
   kilosItems.value.push({ item_name: "Marchandise", weight: 1 });
 }
@@ -70,7 +73,6 @@ function removeSpecialItem(index) {
   specialItems.value.splice(index, 1);
 }
 
-// Calcul total estimé (localement, même si backend recalculera)
 function estimateTotal() {
   if (!annonce.value) return 0;
   let total = 0;
@@ -97,14 +99,14 @@ function validateBeforeSubmit() {
     error.value = "Annonce non chargée.";
     return false;
   }
-  // Vérifier kilos disponibles
+
   const totalKgRequested = kilosItems.value.reduce((s, it) => s + (Number(it.weight) || 0), 0);
   const kilosDisponibles = Number(annonce.value.kilos_disponibles ?? annonce.value.kilos_disponibles ?? 0);
   if (totalKgRequested > kilosDisponibles) {
     error.value = `Poids demandé (${totalKgRequested} Kg) supérieur aux ${kilosDisponibles} Kg disponibles.`;
     return false;
   }
-  // Vérifier entrées positives
+
   for (const it of kilosItems.value) {
     if (!it.item_name || Number(it.weight) <= 0) {
       error.value = "Chaque marchandise au kilo doit avoir un nom et un poids > 0.";
@@ -120,7 +122,6 @@ function validateBeforeSubmit() {
   return true;
 }
 
-// Soumission reservation
 async function submitReservation(evt) {
   evt?.preventDefault();
   successMessage.value = '';
@@ -146,7 +147,7 @@ async function submitReservation(evt) {
 
     console.log("reservation resp:", resp);
     successMessage.value = resp?.data?.message || "Réservation créée avec succès";
-    // Redirection possible vers une page de réservation / profil
+
     const reservationId = resp?.data?.reservation.reservation_id;
     router.push(`/paiement/${reservationId}`);
     // router.push('/mes-reservations')
@@ -156,6 +157,11 @@ async function submitReservation(evt) {
   } finally {
     submitting.value = false;
   }
+}
+function predictionLabel(value) {
+  if (value < 1) return "Demande très faible attendue";
+  if (value < 5) return "Demande modérée attendue";
+  return "Forte demande attendue";
 }
 
 onMounted(() => {
@@ -294,6 +300,25 @@ onMounted(() => {
                 <h4>Estimation total :</h4> 
                 <h4>{{ estimateTotal() }} FCFA</h4>
               </div>
+              <!-- Prédiction IA -->
+<div class="mb-4" v-if="prediction !== null">
+  <div class="alert alert-info border-success">
+    <h5 class="mb-2">📊 Prévision de réservation (IA)</h5>
+
+    <p class="mb-1">
+      <strong>Kilos estimés à réserver demain : </strong>
+      <span class="fw-bold text-success">
+        {{ Number(prediction).toFixed(2) }} Kg
+      </span>
+    </p>
+
+    <small class="text-muted">
+              {{ predictionLabel(prediction) }} – estimation IA.
+            </small>
+  </div>
+</div>
+
+             
 
               <div v-if="successMessage" class="alert alert-success text-center">{{ successMessage }}</div>
 
@@ -313,90 +338,3 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-/* styles légers */
-</style>
-
-<!-- <script setup>
-import Navbar from '@/components/Navbar.vue'
-
-</script>
-<template>
-    <Navbar />
-    <div>
-        <router-view>
-            <div class="container">
-                <div class="d-flex justify-content-center align-items-center vh-100">
-                    <div class="border border-success p-5 rounded-3">
-                        <div class="container d-flex align-items-center ">
-                            <img src="#" class="border border-success rounded-circle p-4 my-5 me-3"  />
-                            <div class="">
-                                <h3 class="mb-0"> John Doe</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <form >
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Départ</label>
-                                        <input class="form-control border-success  bg-light" readonly value="Dakar" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Date Départ</label>
-                                        <input class="form-control border-success  bg-light" readonly value="03 Nov 2025 à 15h" />
-                                    </div>
-                                </div>   
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Arrivée</label>
-                                        <input class="form-control  border-success bg-light" readonly value="Casablanca" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Date Arrivée</label>
-                                        <input class="form-control border-success  bg-light" readonly value="03 Nov 2025 à 15h" />
-                                    </div>
-                                </div>    
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Détails Marchandises</label>
-                                        <input class="form-control  border-success bg-light" readonly value="Casablanca" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Prix/Kg</label>
-                                        <input class="form-control border-success  bg-light" readonly value="70" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Nombre Kg</label>
-                                        <input type="number" placeholder="<70" class="form-control border-success bg-light"  />
-                                    </div>
-                                </div>   
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Marchandises Spécialee</label>
-                                        <input class="form-control  border-success bg-light" value="Tissus" />
-                                        <p>Casier judiciaire
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                                            </svg>
-                                            </p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Prix/Pièce</label>
-                                        <input class="form-control border-success  bg-light" readonly value="100" />
-                                    </div>
-                                
-                                    
-                                </div>  
-                                <div class="text-center">
-                                    <button class="btn btn-success" style="width: 350px;">Réserver</button>
-                                </div>
-                            </form>  
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </router-view>
-    </div>
-</template> -->

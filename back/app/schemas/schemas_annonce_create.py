@@ -55,6 +55,7 @@ class AnnonceShowSchemaResponse(BaseModel):
     status: int
     message: str
     annonce: Optional[AnnonceShowSchemaData]
+    prediction: float
 
 #Schema response update annonce
 class AnnonceUpdateSchemas(BaseModel):

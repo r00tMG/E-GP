@@ -9,7 +9,7 @@ from starlette.staticfiles import StaticFiles
 
 from app.models import models
 from app.databases import database
-from app.router.api import reservations, annonces
+from app.router.api import reservations, annonces, predictions, test
 from app.router.api.guest import register, home, setRole
 from app.router.api.guest import login
 from app.router.api.guest import logout
@@ -27,8 +27,7 @@ app = FastAPI()
 app.mount("/app/static", StaticFiles(directory="./app/static"), name="static")
 
 origins = [
-    "http://localhost:5173",
-    "localhost:5173"
+    "http://localhost:5173"
 ]
 
 
@@ -54,6 +53,8 @@ app.include_router(logout.router, prefix="/api", dependencies=[Depends(get_curre
 
 #GP
 app.include_router(annonces.router, prefix="/api", dependencies=[Depends(get_current_user)])
+app.include_router(predictions.router, prefix="/api", dependencies=[Depends(get_current_user)])
+
 
 #Client
 app.include_router(reservations.router, prefix="/api", dependencies=[Depends(get_current_user)])
@@ -68,3 +69,4 @@ app.include_router(
     #dependencies=[Depends(get_current_user)]
 )
 
+app.include_router(test.router, prefix="/api", dependencies=[Depends(get_current_user)])

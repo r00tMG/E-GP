@@ -13,7 +13,7 @@ from app.router.api.stripe.utils.invoice import generate_invoice_pdf
 router=APIRouter(
     tags=['Stripe']
 )
-# 🔹 Webhook Stripe : confirmation paiement
+# Webhook Stripe : confirmation paiement
 # @router.post("/stripe/webhook")
 # async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 #     payload = await request.body()
@@ -113,7 +113,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
                 print("test webhook 5")
                 return JSONResponse(status_code=200, content={"received": True})
 
-            # 🔒 Idempotence
+            # Idempotence
             if payment.status == models.PaymentStatus.SUCCEEDED:
                 print("test webhook 6")
                 return JSONResponse(status_code=200, content={"received": True})
@@ -130,7 +130,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
             db.commit()
 
-            # ⚠️ Side effects après commit
+            # Side effects après commit
             pdf_path = generate_invoice_pdf(reservation, payment)
 
             if reservation.user.email:
@@ -186,5 +186,5 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         db.rollback()
         print("WEBHOOK ERROR:", e)
 
-    # ⚠️ Toujours 200 pour Stripe
+    # Toujours 200 pour Stripe
     return JSONResponse(status_code=200, content={"received": True})
