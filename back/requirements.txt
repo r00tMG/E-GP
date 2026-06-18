@@ -1,4 +1,5 @@
 fastapi[all]
+starlette
 python-dotenv
 SQLAlchemy
 passlib

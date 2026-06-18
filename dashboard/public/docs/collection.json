@@ -1,0 +1,780 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost"
+        }
+    ],
+    "info": {
+        "name": "Laravel",
+        "_postman_id": "286d675d-fbed-4026-a945-9efb4c822116",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Category Management",
+            "description": "\nAPIs for managing categories",
+            "item": [
+                {
+                    "name": "Get All Categories",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retrieves a list of all categories.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"status\": 200,\n  \"categories\": [\n      {\n          \"id\": 1,\n          \"name\": \"Beverages\",\n          \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n          \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n      }\n  ]\n }\nDisplay a listing of the resource.",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a New Category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Beverages\"}"
+                        },
+                        "description": "Stores a newly created category in the database.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"status\": 201,\n  \"message\": \"Your category have been created with successfully\",\n  \"category\": {\n      \"id\": 2,\n      \"name\": \"Beverages\",\n      \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n      \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n  }\n }\nStore a newly created resource in storage.",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Show a Specific Category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the category."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Displays a specific category.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"id\": 1,\n  \"name\": \"Beverages\",\n  \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n  \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n }\nDisplay the specified resource.",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update the specified resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the category."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Beverages\"}"
+                        },
+                        "description": "Update a Specific Category\n\n Updates the specified category in the database.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"status\": 200,\n  \"message\": \"Category updated successfully\",\n  \"category\": {\n      \"id\": 1,\n      \"name\": \"Updated Beverages\",\n      \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n      \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n  }\n }",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete a Category",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the category."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Removes the specified category from the database.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{\n  \"status\": 204,\n  \"message\": \"Your category have been deleted with success\"\n }\nRemove the specified resource from storage.",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "GET api\/user",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Ingredient Management",
+            "description": "\nAPIs for managing ingredients",
+            "item": [
+                {
+                    "name": "Display a listing of the resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/ingredients",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/ingredients"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "*\n* @response {\n*   \"status\": 200,\n*   \"message\": \"Liste des ingr\u00e9dients\",\n*   \"ingredients\": [\n*      {\"id\": 1, \"name\": \"Tomato\", \"quantity\": \"2 kg\", \"created_at\": \"2024-08-29\", \"updated_at\": \"2024-08-29\"},\n*      {\"id\": 2, \"name\": \"Onion\", \"quantity\": \"1 kg\", \"created_at\": \"2024-08-29\", \"updated_at\": \"2024-08-29\"}\n*   ]\n* }",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "x-ratelimit-limit",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "x-ratelimit-remaining",
+                                    "value": "-2"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"status\":200,\"message\":\"Liste des ingr\\u00e9dients\",\"ingredients\":[{\"id\":6,\"name\":\"Elizabeth Byers\",\"quantity\":513,\"created_at\":\"2024-08-29T22:19:04.000000Z\",\"updated_at\":\"2024-08-29T22:19:04.000000Z\"},{\"id\":7,\"name\":\"Gareth Randolph\",\"quantity\":427,\"created_at\":\"2024-08-29T22:19:04.000000Z\",\"updated_at\":\"2024-08-29T22:19:04.000000Z\"},{\"id\":5,\"name\":\"Stone Mann\",\"quantity\":305,\"created_at\":\"2024-08-29T16:07:55.000000Z\",\"updated_at\":\"2024-08-29T16:07:55.000000Z\"},{\"id\":3,\"name\":\"Rogan Ross\",\"quantity\":123,\"created_at\":\"2024-08-29T16:06:52.000000Z\",\"updated_at\":\"2024-08-29T16:06:52.000000Z\"},{\"id\":4,\"name\":\"Brody Baldwin\",\"quantity\":908,\"created_at\":\"2024-08-29T16:06:52.000000Z\",\"updated_at\":\"2024-08-29T16:06:52.000000Z\"},{\"id\":1,\"name\":\"2 lb thin sliced chicken breasts\",\"quantity\":\"1 g\",\"created_at\":\"2024-08-27T22:09:29.000000Z\",\"updated_at\":\"2024-08-27T22:09:29.000000Z\"},{\"id\":2,\"name\":\"chicken broth\",\"quantity\":\"3\\\/4\",\"created_at\":\"2024-08-27T22:09:29.000000Z\",\"updated_at\":\"2024-08-27T22:09:29.000000Z\"}]}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Store a newly created resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/ingredients",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/ingredients"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Tomato\",\"quantity\":\"2 kg\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n\"status\": 201,\n\"message\": \"Recipe add successfully\",\n\"ingredient\": {\n\"id\": 1,\n\"name\": \"Tomato\",\n\"quantity\": \"2 kg\",\n\"created_at\": \"2024-08-29\",\n\"updated_at\": \"2024-08-29\"\n}\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n \"status\": 400,\n \"message\": \"Bad Request\",\n \"errors\": {\n \"name\": [\"The name field is required.\"],\n \"quantity\": [\"The quantity field is required.\"]\n }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Display the specified resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/ingredients\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/ingredients\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the ingredient."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\"message\": \"Liste des ingr\u00e9dients\",\n\"ingredient\": {\n\"id\": 1,\n\"name\": \"Tomato\",\n\"quantity\": \"2 kg\",\n\"created_at\": \"2024-08-29\",\n\"updated_at\": \"2024-08-29\"\n}\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update the specified resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/ingredients\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/ingredients\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the ingredient."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Tomato\",\"quantity\":\"2 kg\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n\"status\": 201,\n\"message\": \"Recipe update successfully\",\n\"ingredient\": {\n\"id\": 1,\n\"name\": \"Tomato\",\n\"quantity\": \"2 kg\",\n\"created_at\": \"2024-08-29\",\n\"updated_at\": \"2024-08-29\"\n}\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n\"status\": 400,\n\"message\": \"Bad Request\",\n\"errors\": {\n\"name\": [\"The name field is required.\"],\n\"quantity\": [\"The quantity field is required.\"]\n}\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Remove the specified resource from storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/ingredients\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/ingredients\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the ingredient."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{\n\"status\": 204,\n\"message\": \"Your ingredient have been deleted with successfully\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Recipe Management",
+            "description": "\nAPIs for managing recipes.",
+            "item": [
+                {
+                    "name": "Get all recipes.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/recipes",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/recipes"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint retrieves a list of all recipes in the database.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\"status\": 200,\n\"message\": \"Liste des recettes\",\n\"recipes\": [\n{\n\"id\": 1,\n\"title\": \"Spaghetti Bolognese\",\n\"image\": \"path\/to\/image.jpg\",\n\"summary\": \"A classic Italian pasta dish.\",\n\"ingredients\": [\n{\n\"name\": \"Spaghetti\",\n\"quantity\": \"200g\"\n},\n{\n\"name\": \"Ground Beef\",\n\"quantity\": \"100g\"\n}\n]\n}\n]\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Store a newly created recipe.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/recipes",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/recipes"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "multipart\/form-data"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "title",
+                                    "value": "\"Chocolate Cake\"",
+                                    "type": "text",
+                                    "description": "The title of the recipe."
+                                },
+                                {
+                                    "key": "summary",
+                                    "value": "quo",
+                                    "type": "text",
+                                    "description": "A brief summary of the recipe."
+                                },
+                                {
+                                    "key": "ingredients[0]",
+                                    "value": "aut",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "image",
+                                    "src": [],
+                                    "type": "file"
+                                }
+                            ]
+                        },
+                        "description": "This endpoint allows users to create a new recipe.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n\"id\": 1,\n\"title\": \"Chocolate Cake\",\n\"image\": \"path\/to\/image.jpg\",\n\"summary\": \"A rich and moist chocolate cake.\",\n\"ingredients\": [\n{\n\"name\": \"Flour\",\n\"quantity\": \"200g\"\n},\n{\n\"name\": \"Cocoa Powder\",\n\"quantity\": \"50g\"\n}\n]\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n\"message\": \"Validation errors\",\n\"errors\": {\n\"title\": [\"The title field is required.\"],\n\"image\": [\"The image field is required.\"]\n}\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Show a specific recipe.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/recipes\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/recipes\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the recipe."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint allows users to view a specific recipe by its ID.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\"recipe\": {\n\"id\": 1,\n\"title\": \"Spaghetti Bolognese\",\n\"image\": \"path\/to\/image.jpg\",\n\"summary\": \"A classic Italian pasta dish.\",\n\"ingredients\": [\n{\n\"name\": \"Spaghetti\",\n\"quantity\": \"200g\"\n},\n{\n\"name\": \"Ground Beef\",\n\"quantity\": \"100g\"\n}\n]\n}\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update an existing recipe.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/recipes\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/recipes\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the recipe."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"\\\"Vegan Pancakes\\\"\",\"image\":\"est\",\"summary\":\"dolorem\",\"ingredients\":[\"nisi\"]}"
+                        },
+                        "description": "This endpoint allows users to update a specific recipe.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n\"status\": 201,\n\"message\": \"Your recipes have been updated successfully\",\n\"recipe\": {\n\"id\": 1,\n\"title\": \"Vegan Pancakes\",\n\"image\": \"path\/to\/image.jpg\",\n\"summary\": \"Delicious and healthy vegan pancakes.\",\n\"ingredients\": [\n{\n\"name\": \"Banana\",\n\"quantity\": \"2\"\n},\n{\n\"name\": \"Almond Milk\",\n\"quantity\": \"200ml\"\n}\n]\n}\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n\"message\": \"Validation errors\",\n\"errors\": {\n\"title\": [\"The title field is required.\"],\n\"image\": [\"The image field is required.\"]\n}\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete a specific recipe.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/recipes\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/recipes\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the recipe."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint allows users to delete a recipe by its ID.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{\n\"status\": 204,\n\"message\": \"Your recipe has been deleted successfully\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n\"status\": 404,\n\"message\": \"Recette introuvable\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}

@@ -1,0 +1,1029 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/categories:
+    get:
+      summary: 'Get All Categories'
+      operationId: getAllCategories
+      description: 'Retrieves a list of all categories.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n  \"status\": 200,\n  \"categories\": [\n      {\n          \"id\": 1,\n          \"name\": \"Beverages\",\n          \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n          \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n      }\n  ]\n }\nDisplay a listing of the resource."
+      tags:
+        - 'Category Management'
+      security: []
+    post:
+      summary: 'Create a New Category'
+      operationId: createANewCategory
+      description: 'Stores a newly created category in the database.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n  \"status\": 201,\n  \"message\": \"Your category have been created with successfully\",\n  \"category\": {\n      \"id\": 2,\n      \"name\": \"Beverages\",\n      \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n      \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n  }\n }\nStore a newly created resource in storage."
+      tags:
+        - 'Category Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the category.'
+                  example: Beverages
+              required:
+                - name
+      security: []
+  '/api/categories/{id}':
+    get:
+      summary: 'Show a Specific Category'
+      operationId: showASpecificCategory
+      description: 'Displays a specific category.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n  \"id\": 1,\n  \"name\": \"Beverages\",\n  \"created_at\": \"2024-08-29T12:00:00.000000Z\",\n  \"updated_at\": \"2024-08-29T12:00:00.000000Z\"\n }\nDisplay the specified resource."
+      tags:
+        - 'Category Management'
+      security: []
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: "Update a Specific Category\n\n Updates the specified category in the database."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 200
+                  message: 'Category updated successfully'
+                  category:
+                    id: 1
+                    name: 'Updated Beverages'
+                    created_at: '2024-08-29T12:00:00.000000Z'
+                    updated_at: '2024-08-29T12:00:00.000000Z'
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: 'Category updated successfully'
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: 'Updated Beverages'
+                      created_at:
+                        type: string
+                        example: '2024-08-29T12:00:00.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2024-08-29T12:00:00.000000Z'
+      tags:
+        - 'Category Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the category.'
+                  example: Beverages
+              required:
+                - name
+      security: []
+    delete:
+      summary: 'Delete a Category'
+      operationId: deleteACategory
+      description: 'Removes the specified category from the database.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - 'Category Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the category.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/user:
+    get:
+      summary: ''
+      operationId: getApiUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/ingredients:
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: "*\n* @response {\n*   \"status\": 200,\n*   \"message\": \"Liste des ingrédients\",\n*   \"ingredients\": [\n*      {\"id\": 1, \"name\": \"Tomato\", \"quantity\": \"2 kg\", \"created_at\": \"2024-08-29\", \"updated_at\": \"2024-08-29\"},\n*      {\"id\": 2, \"name\": \"Onion\", \"quantity\": \"1 kg\", \"created_at\": \"2024-08-29\", \"updated_at\": \"2024-08-29\"}\n*   ]\n* }"
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 200
+                  message: 'Liste des ingrédients'
+                  ingredients:
+                    -
+                      id: 6
+                      name: 'Elizabeth Byers'
+                      quantity: 513
+                      created_at: '2024-08-29T22:19:04.000000Z'
+                      updated_at: '2024-08-29T22:19:04.000000Z'
+                    -
+                      id: 7
+                      name: 'Gareth Randolph'
+                      quantity: 427
+                      created_at: '2024-08-29T22:19:04.000000Z'
+                      updated_at: '2024-08-29T22:19:04.000000Z'
+                    -
+                      id: 5
+                      name: 'Stone Mann'
+                      quantity: 305
+                      created_at: '2024-08-29T16:07:55.000000Z'
+                      updated_at: '2024-08-29T16:07:55.000000Z'
+                    -
+                      id: 3
+                      name: 'Rogan Ross'
+                      quantity: 123
+                      created_at: '2024-08-29T16:06:52.000000Z'
+                      updated_at: '2024-08-29T16:06:52.000000Z'
+                    -
+                      id: 4
+                      name: 'Brody Baldwin'
+                      quantity: 908
+                      created_at: '2024-08-29T16:06:52.000000Z'
+                      updated_at: '2024-08-29T16:06:52.000000Z'
+                    -
+                      id: 1
+                      name: '2 lb thin sliced chicken breasts'
+                      quantity: '1 g'
+                      created_at: '2024-08-27T22:09:29.000000Z'
+                      updated_at: '2024-08-27T22:09:29.000000Z'
+                    -
+                      id: 2
+                      name: 'chicken broth'
+                      quantity: 3/4
+                      created_at: '2024-08-27T22:09:29.000000Z'
+                      updated_at: '2024-08-27T22:09:29.000000Z'
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: 'Liste des ingrédients'
+                  ingredients:
+                    type: array
+                    example:
+                      -
+                        id: 6
+                        name: 'Elizabeth Byers'
+                        quantity: 513
+                        created_at: '2024-08-29T22:19:04.000000Z'
+                        updated_at: '2024-08-29T22:19:04.000000Z'
+                      -
+                        id: 7
+                        name: 'Gareth Randolph'
+                        quantity: 427
+                        created_at: '2024-08-29T22:19:04.000000Z'
+                        updated_at: '2024-08-29T22:19:04.000000Z'
+                      -
+                        id: 5
+                        name: 'Stone Mann'
+                        quantity: 305
+                        created_at: '2024-08-29T16:07:55.000000Z'
+                        updated_at: '2024-08-29T16:07:55.000000Z'
+                      -
+                        id: 3
+                        name: 'Rogan Ross'
+                        quantity: 123
+                        created_at: '2024-08-29T16:06:52.000000Z'
+                        updated_at: '2024-08-29T16:06:52.000000Z'
+                      -
+                        id: 4
+                        name: 'Brody Baldwin'
+                        quantity: 908
+                        created_at: '2024-08-29T16:06:52.000000Z'
+                        updated_at: '2024-08-29T16:06:52.000000Z'
+                      -
+                        id: 1
+                        name: '2 lb thin sliced chicken breasts'
+                        quantity: '1 g'
+                        created_at: '2024-08-27T22:09:29.000000Z'
+                        updated_at: '2024-08-27T22:09:29.000000Z'
+                      -
+                        id: 2
+                        name: 'chicken broth'
+                        quantity: 3/4
+                        created_at: '2024-08-27T22:09:29.000000Z'
+                        updated_at: '2024-08-27T22:09:29.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 6
+                        name:
+                          type: string
+                          example: 'Elizabeth Byers'
+                        quantity:
+                          type: integer
+                          example: 513
+                        created_at:
+                          type: string
+                          example: '2024-08-29T22:19:04.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2024-08-29T22:19:04.000000Z'
+      tags:
+        - 'Ingredient Management'
+      security: []
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 201
+                  message: 'Recipe add successfully'
+                  ingredient:
+                    id: 1
+                    name: Tomato
+                    quantity: '2 kg'
+                    created_at: '2024-08-29'
+                    updated_at: '2024-08-29'
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: 'Recipe add successfully'
+                  ingredient:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: Tomato
+                      quantity:
+                        type: string
+                        example: '2 kg'
+                      created_at:
+                        type: string
+                        example: '2024-08-29'
+                      updated_at:
+                        type: string
+                        example: '2024-08-29'
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 400
+                  message: 'Bad Request'
+                  errors:
+                    name:
+                      - 'The name field is required.'
+                    quantity:
+                      - 'The quantity field is required.'
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: 'Bad Request'
+                  errors:
+                    type: object
+                    properties:
+                      name:
+                        type: array
+                        example:
+                          - 'The name field is required.'
+                        items:
+                          type: string
+                      quantity:
+                        type: array
+                        example:
+                          - 'The quantity field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Ingredient Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the ingredient.'
+                  example: Tomato
+                quantity:
+                  type: string
+                  description: 'The quantity of the ingredient.'
+                  example: '2 kg'
+              required:
+                - name
+                - quantity
+      security: []
+  '/api/ingredients/{id}':
+    get:
+      summary: 'Display the specified resource.'
+      operationId: displayTheSpecifiedResource
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Liste des ingrédients'
+                  ingredient:
+                    id: 1
+                    name: Tomato
+                    quantity: '2 kg'
+                    created_at: '2024-08-29'
+                    updated_at: '2024-08-29'
+                properties:
+                  message:
+                    type: string
+                    example: 'Liste des ingrédients'
+                  ingredient:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: Tomato
+                      quantity:
+                        type: string
+                        example: '2 kg'
+                      created_at:
+                        type: string
+                        example: '2024-08-29'
+                      updated_at:
+                        type: string
+                        example: '2024-08-29'
+      tags:
+        - 'Ingredient Management'
+      security: []
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 201
+                  message: 'Recipe update successfully'
+                  ingredient:
+                    id: 1
+                    name: Tomato
+                    quantity: '2 kg'
+                    created_at: '2024-08-29'
+                    updated_at: '2024-08-29'
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: 'Recipe update successfully'
+                  ingredient:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: Tomato
+                      quantity:
+                        type: string
+                        example: '2 kg'
+                      created_at:
+                        type: string
+                        example: '2024-08-29'
+                      updated_at:
+                        type: string
+                        example: '2024-08-29'
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 400
+                  message: 'Bad Request'
+                  errors:
+                    name:
+                      - 'The name field is required.'
+                    quantity:
+                      - 'The quantity field is required.'
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: 'Bad Request'
+                  errors:
+                    type: object
+                    properties:
+                      name:
+                        type: array
+                        example:
+                          - 'The name field is required.'
+                        items:
+                          type: string
+                      quantity:
+                        type: array
+                        example:
+                          - 'The quantity field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Ingredient Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the ingredient.'
+                  example: Tomato
+                quantity:
+                  type: string
+                  description: 'The quantity of the ingredient.'
+                  example: '2 kg'
+              required:
+                - name
+                - quantity
+      security: []
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - 'Ingredient Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the ingredient.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/recipes:
+    get:
+      summary: 'Get all annonces.'
+      operationId: getAllRecipes
+      description: 'This endpoint retrieves a list of all annonces in the database.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 200
+                  message: 'Liste des recettes'
+                  recipes:
+                    -
+                      id: 1
+                      title: 'Spaghetti Bolognese'
+                      image: path/to/image.jpg
+                      summary: 'A classic Italian pasta dish.'
+                      ingredients:
+                        -
+                          name: Spaghetti
+                          quantity: 200g
+                        -
+                          name: 'Ground Beef'
+                          quantity: 100g
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: 'Liste des recettes'
+                  recipes:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        title: 'Spaghetti Bolognese'
+                        image: path/to/image.jpg
+                        summary: 'A classic Italian pasta dish.'
+                        ingredients:
+                          -
+                            name: Spaghetti
+                            quantity: 200g
+                          -
+                            name: 'Ground Beef'
+                            quantity: 100g
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: 'Spaghetti Bolognese'
+                        image:
+                          type: string
+                          example: path/to/image.jpg
+                        summary:
+                          type: string
+                          example: 'A classic Italian pasta dish.'
+                        ingredients:
+                          type: array
+                          example:
+                            -
+                              name: Spaghetti
+                              quantity: 200g
+                            -
+                              name: 'Ground Beef'
+                              quantity: 100g
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: Spaghetti
+                              quantity:
+                                type: string
+                                example: 200g
+      tags:
+        - 'Recipe Management'
+      security: []
+    post:
+      summary: 'Store a newly created recipe.'
+      operationId: storeANewlyCreatedRecipe
+      description: 'This endpoint allows users to create a new recipe.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  title: 'Chocolate Cake'
+                  image: path/to/image.jpg
+                  summary: 'A rich and moist chocolate cake.'
+                  ingredients:
+                    -
+                      name: Flour
+                      quantity: 200g
+                    -
+                      name: 'Cocoa Powder'
+                      quantity: 50g
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: 'Chocolate Cake'
+                  image:
+                    type: string
+                    example: path/to/image.jpg
+                  summary:
+                    type: string
+                    example: 'A rich and moist chocolate cake.'
+                  ingredients:
+                    type: array
+                    example:
+                      -
+                        name: Flour
+                        quantity: 200g
+                      -
+                        name: 'Cocoa Powder'
+                        quantity: 50g
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Flour
+                        quantity:
+                          type: string
+                          example: 200g
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Validation errors'
+                  errors:
+                    title:
+                      - 'The title field is required.'
+                    image:
+                      - 'The image field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation errors'
+                  errors:
+                    type: object
+                    properties:
+                      title:
+                        type: array
+                        example:
+                          - 'The title field is required.'
+                        items:
+                          type: string
+                      image:
+                        type: array
+                        example:
+                          - 'The image field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Recipe Management'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'The title of the recipe.'
+                  example: '"Chocolate Cake"'
+                image:
+                  type: string
+                  format: binary
+                  description: 'An image of the recipe.'
+                summary:
+                  type: string
+                  description: 'A brief summary of the recipe.'
+                  example: quo
+                ingredients:
+                  type: array
+                  description: 'A list of ingredients with their quantities.'
+                  example:
+                    - aut
+                  items:
+                    type: string
+              required:
+                - title
+                - image
+                - summary
+                - ingredients
+      security: []
+  '/api/recipes/{id}':
+    get:
+      summary: 'Show a specific recipe.'
+      operationId: showASpecificRecipe
+      description: 'This endpoint allows users to view a specific recipe by its ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  recipe:
+                    id: 1
+                    title: 'Spaghetti Bolognese'
+                    image: path/to/image.jpg
+                    summary: 'A classic Italian pasta dish.'
+                    ingredients:
+                      -
+                        name: Spaghetti
+                        quantity: 200g
+                      -
+                        name: 'Ground Beef'
+                        quantity: 100g
+                properties:
+                  recipe:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      title:
+                        type: string
+                        example: 'Spaghetti Bolognese'
+                      image:
+                        type: string
+                        example: path/to/image.jpg
+                      summary:
+                        type: string
+                        example: 'A classic Italian pasta dish.'
+                      ingredients:
+                        type: array
+                        example:
+                          -
+                            name: Spaghetti
+                            quantity: 200g
+                          -
+                            name: 'Ground Beef'
+                            quantity: 100g
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: Spaghetti
+                            quantity:
+                              type: string
+                              example: 200g
+      tags:
+        - 'Recipe Management'
+      security: []
+    put:
+      summary: 'Update an existing recipe.'
+      operationId: updateAnExistingRecipe
+      description: 'This endpoint allows users to update a specific recipe.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 201
+                  message: 'Your annonces have been updated successfully'
+                  recipe:
+                    id: 1
+                    title: 'Vegan Pancakes'
+                    image: path/to/image.jpg
+                    summary: 'Delicious and healthy vegan pancakes.'
+                    ingredients:
+                      -
+                        name: Banana
+                        quantity: '2'
+                      -
+                        name: 'Almond Milk'
+                        quantity: 200ml
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: 'Your annonces have been updated successfully'
+                  recipe:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      title:
+                        type: string
+                        example: 'Vegan Pancakes'
+                      image:
+                        type: string
+                        example: path/to/image.jpg
+                      summary:
+                        type: string
+                        example: 'Delicious and healthy vegan pancakes.'
+                      ingredients:
+                        type: array
+                        example:
+                          -
+                            name: Banana
+                            quantity: '2'
+                          -
+                            name: 'Almond Milk'
+                            quantity: 200ml
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: Banana
+                            quantity:
+                              type: string
+                              example: '2'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Validation errors'
+                  errors:
+                    title:
+                      - 'The title field is required.'
+                    image:
+                      - 'The image field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation errors'
+                  errors:
+                    type: object
+                    properties:
+                      title:
+                        type: array
+                        example:
+                          - 'The title field is required.'
+                        items:
+                          type: string
+                      image:
+                        type: array
+                        example:
+                          - 'The image field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Recipe Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'The title of the recipe.'
+                  example: '"Vegan Pancakes"'
+                image:
+                  type: string
+                  description: 'The image of the recipe.'
+                  example: est
+                summary:
+                  type: string
+                  description: 'A brief summary of the recipe.'
+                  example: dolorem
+                ingredients:
+                  type: array
+                  description: 'A list of ingredients with their quantities.'
+                  example:
+                    - nisi
+                  items:
+                    type: string
+              required:
+                - title
+                - image
+                - summary
+                - ingredients
+      security: []
+    delete:
+      summary: 'Delete a specific recipe.'
+      operationId: deleteASpecificRecipe
+      description: 'This endpoint allows users to delete a recipe by its ID.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 404
+                  message: 'Recette introuvable'
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: 'Recette introuvable'
+      tags:
+        - 'Recipe Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the recipe.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+tags:
+  -
+    name: 'Category Management'
+    description: "\nAPIs for managing categories"
+  -
+    name: Endpoints
+    description: ''
+  -
+    name: 'Ingredient Management'
+    description: "\nAPIs for managing ingredients"
+  -
+    name: 'Recipe Management'
+    description: "\nAPIs for managing annonces."

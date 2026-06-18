@@ -28,6 +28,6 @@ async def login(request:UserLoginSchemas = Body(...), db: Session=Depends(get_db
         access_token = create_access_token(
             data={"sub": user.email, "role":user.role, "id":user.id, "first_name":user.first_name, "last_name":user.last_name}, expires_delta=access_token_expires
         )
-        return {"access_token":access_token, "token_type":"bearer", "role":user.role}
+        return {"access_token":access_token, "token_type":"bearer", "role":user.role, 'user_id':user.id}
     else:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Impossible de vous connecté, veuillez remplir les valeurs correctes")

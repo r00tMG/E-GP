@@ -1,0 +1,57 @@
+name: 🚀 Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Directory Permissions
+      run: chmod -R 775 storage bootstrap/cache
+
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+    - name: Composer install
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Sync Files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.sftp_host }}
+        username: ${{ secrets.sftp_user }}
+        password: ${{ secrets.sftp_password }}
+        server-dir: "/sites/koool.mayaapps.site/"
+        exclude: |
+          **/.github/**
+          **/.releases/**
+          **/node_modules/**
+          **/.gitignore
+          **/package-lock.json
+          **/readme.md
+          **/vendor/**
+          **/storage/*.key
+          **/.env
+          **/.git*
+          **/.git/**/*
+
+    - name: SSH into the production server and restart
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.sftp_host }}
+        username: ${{ secrets.sftp_user }}
+        password: ${{ secrets.sftp_password }}
+        port: 22
+        script: |
+          cd sites/koool.mayaapps.site/
+          composer update
+          composer install
+          php artisan migrate:status
+          php artisan migrate
+

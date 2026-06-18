@@ -16,7 +16,6 @@ router = APIRouter()
 
 
 MODEL_PATH = Path("./mls/models/RandomForest_pipeline.pkl")
-
 pipeline = joblib.load(MODEL_PATH)
 
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -16,6 +16,7 @@ class UserResponse(BaseModel):
     role: Optional[str] = Field(None)
     created_at: datetime = Field(None)
 
+
     class Config:
         from_attributes = True
 
@@ -23,6 +24,14 @@ class UserResponseAfterUpdate(BaseModel):
     status: int
     message: str
     user: UserResponse
+
+    class Config:
+        from_attributes = True
+
+class UserResponseIndex(BaseModel):
+    status: int
+    message: str
+    users: List[UserResponse]
 
     class Config:
         from_attributes = True

@@ -179,7 +179,7 @@ async def create_checkout_session(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    print("test test")
+    print("test paiement", data.reservation_id)
     try:
         # 1) récupérer la réservation
         reservation = (
@@ -211,10 +211,16 @@ async def create_checkout_session(
             .filter(Payment.reservation_id == reservation.id, Payment.status == "pending")
             .first()
         )
+
+
         if existing_payment and existing_payment.stripe_session_id:
+            print("existe ou pas")
             # Optionnel: vérifier la session via Stripe si besoin
+            session = stripe.checkout.Session.retrieve(
+                existing_payment.stripe_session_id
+            )
             return {
-                "checkout_url": f"https://checkout.stripe.com/pay/{existing_payment.stripe_session_id}",
+                "checkout_url": session.url,
                 "payment_id": existing_payment.id,
                 "reservation_id": reservation.id,
             }
@@ -249,7 +255,7 @@ async def create_checkout_session(
                         "name": f"{item.item_name}"
                     },
                 },
-                "quantity": int(item.weight),  # ✅ LE POIDS EST LA QUANTITÉ
+                "quantity": int(item.weight),
             })
 
         for s_item in reservation.special_items:
@@ -262,7 +268,7 @@ async def create_checkout_session(
                         "name": f"{s_item.item_name}"
                     },
                 },
-                "quantity": s_item.quantity,  # ✅
+                "quantity": s_item.quantity,
             })
 
         # for s_item in reservation.special_items:
@@ -344,7 +350,12 @@ async def create_checkout_session(
         db.commit()
         db.refresh(payment)
 
-        return {"checkout_url": session.url, "payment_id": payment.id, "reservation_id": reservation.id}
+
+        print("checkout: ", session.url)
+
+        return {
+            "checkout_url": session.url
+        }
 
     except HTTPException:
         raise

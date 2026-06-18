@@ -21,9 +21,10 @@ router = APIRouter(
 async def create(
         reservation_data: ReservationCreate,
         db: Session = Depends(get_db),
-        current_user: models.User = Depends(role_required("client")),
+        current_user: models.User = Depends(role_required("client", "gp")),
 ):
-    #print(f"user in reservation: {current_user.id}, {current_user.email}, {current_user.role}")
+    print(f"user in reservation: {current_user.id}, {current_user.email}, {current_user.role}")
+    print(f'annonce id: {reservation_data.annonce_id} \n items: {reservation_data.items} \n specials items: {reservation_data.special_items}')
     # Vérifier si l’annonce existe
     annonce = db.query(models.Annonce).filter(models.Annonce.id == reservation_data.annonce_id).first()
     if not annonce:
@@ -121,10 +122,11 @@ async def create(
 
 @router.get("/reservations")
 async def indexbyuser(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
-    reservations = (db.query(models.Reservation)
+    reservations = (db.query(models.Reservation).join(models.Annonce)
     .options(
         joinedload(models.Reservation.user),
-            joinedload(models.Reservation.annonce),
+            joinedload(models.Reservation.annonce).
+                joinedload(models.Annonce.gp),
             joinedload(models.Reservation.items),
             joinedload(models.Reservation.special_items)
     ).filter(models.Reservation.user_id == current_user.id).all())
@@ -132,7 +134,28 @@ async def indexbyuser(db: Session = Depends(get_db), current_user=Depends(get_cu
     return {
         "status": status.HTTP_200_OK,
         "message": "Réservation créée avec succès",
-        "reservation": reservations
+        "reservations": reservations
+    }
+
+@router.get("/reservation/{id}")
+async def show(
+        id:int,
+        db: Session = Depends(get_db),
+        current_user=Depends(get_current_user)
+):
+    reservations = (db.query(models.Reservation).join(models.Annonce)
+    .options(
+        joinedload(models.Reservation.user),
+            joinedload(models.Reservation.annonce).
+                joinedload(models.Annonce.gp),
+            joinedload(models.Reservation.items),
+            joinedload(models.Reservation.special_items)
+    ).filter(models.Reservation.user_id == current_user.id and models.Reservation.id == id)).first()
+
+    return {
+        "status": status.HTTP_200_OK,
+        "message": "Réservation créée avec succès",
+        "reservations": reservations
     }
 
 @router.get("/admin/reservations")

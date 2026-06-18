@@ -19,6 +19,7 @@ async def register(
     payload: UserRegisterSchemas = Body(...),
     db: Session = Depends(get_db)
 ):
+    print("payload: ", payload)
     # Vérification de l'notebooks
     if payload.password != payload.confirm_password:
         raise HTTPException(
@@ -28,10 +29,13 @@ async def register(
 
     # Vérifier si l'email existe déjà
     existing_user = db.query(User).filter(User.email == payload.email).first()
+    print("test1")
     if existing_user:
+        print("test2")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Un utilisateur avec cet email existe déjà.")
+        print("test vla")
 
     # Créer l'utilisateur
     new_user = User(
@@ -40,12 +44,14 @@ async def register(
         phone=payload.phone,
         role=payload.role
     )
+    print("test3")
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
     #Creation du stripe Connect Custom du gp
     if new_user.role == 'gp':
+        print("test4")
         try:
             #stripe_account = await create_connected_account(new_user.email)
             #stripe_account_id = stripe_account.get("account_id")
@@ -58,6 +64,7 @@ async def register(
             db.refresh(new_user)
 
         except Exception as e:
+            print("test5")
             # Supprimer le user si Stripe échoue (optionnel)
             db.delete(new_user)
             db.commit()

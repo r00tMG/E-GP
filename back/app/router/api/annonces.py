@@ -8,7 +8,7 @@ from sqlalchemy.sql.functions import func
 from app.databases.database import get_db
 from app.models import models
 from app.models.models import Annonce
-from app.router.api.predictions import compute_features, predict_next_day
+#from app.router.api.predictions import compute_features, predict_next_day
 from app.schemas.schemas_annonce_create import AnnonceCreateSchemas, AnnonceCreateSchemasResponse, \
     AnnonceCreateSchemasData, AnnonceDeleteSchemaResponce, AnnonceShowSchemaResponse, AnnonceUpdateSchemaResponse, \
     AnnonceUpdateSchemas, AnnonceUpdateSchemasData, AnnonceGetSchemasResponse
@@ -18,7 +18,6 @@ from app.security.token import role_required
 
 router = APIRouter(
     tags=['Annonce']
-
 )
 
 
@@ -111,6 +110,7 @@ async def show(
 ):
     print("test show")
     annonce = db.query(models.Annonce).filter(models.Annonce.id == id).first()
+    #print(annonce)
     if not annonce:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -118,15 +118,15 @@ async def show(
         )
     snapshot = datetime.utcnow()
 
-    features = compute_features(db, annonce, snapshot)
-    print("Features: ", features)
-    prediction = predict_next_day(features)
-    print("Predictions: ",prediction)
+    #features = compute_features(db, annonce, snapshot)
+    #print("Features: ", features)
+    #prediction = predict_next_day(features)
+   # print("Predictions: ",prediction)
     return {
         "status": status.HTTP_200_OK,
         "message": "Les informations d'une annonce",
         "annonce": annonce,
-        "prediction": prediction
+    #    "prediction": prediction
     }
 
 
@@ -138,6 +138,7 @@ async def update(
         db: Session = Depends(get_db),
         currentUser: TokenData = Depends(role_required("gp"))
 ):
+    print(f"L'annonce {id}")
     query = db.query(models.Annonce).filter(models.Annonce.id == id)
     annonce = query.first()
     if not annonce:

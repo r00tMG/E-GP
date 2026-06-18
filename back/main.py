@@ -5,11 +5,14 @@ from fastapi import FastAPI
 from fastapi.params import Depends
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+#from starlette.middleware.cors import CORSMiddleware
+#from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.models import models
 from app.databases import database
-from app.router.api import reservations, annonces, predictions, test
+from app.router.api import reservations, annonces, test
+from app.router.api.admin import users
 from app.router.api.guest import register, home, setRole
 from app.router.api.guest import login
 from app.router.api.guest import logout
@@ -53,20 +56,23 @@ app.include_router(logout.router, prefix="/api", dependencies=[Depends(get_curre
 
 #GP
 app.include_router(annonces.router, prefix="/api", dependencies=[Depends(get_current_user)])
-app.include_router(predictions.router, prefix="/api", dependencies=[Depends(get_current_user)])
+#app.include_router(predictions.router, prefix="/api", dependencies=[Depends(get_current_user)])
 
 
 #Client
 app.include_router(reservations.router, prefix="/api", dependencies=[Depends(get_current_user)])
 
 #Admin
-
+app.include_router(
+    users.router,
+    prefix="/api",
+    #dependencies=[Depends(get_current_user)]
+)
 # Paiement
 app.include_router(payments.router, prefix="/api", dependencies=[Depends(get_current_user)])
 app.include_router(
     webhook.router,
-    #prefix="/api",
-    #dependencies=[Depends(get_current_user)]
+    prefix="/api"
 )
 
 app.include_router(test.router, prefix="/api", dependencies=[Depends(get_current_user)])

@@ -1,0 +1,344 @@
+name: 'Ingredient Management'
+description: |-
+
+  APIs for managing ingredients
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/ingredients
+    metadata:
+      groupName: 'Ingredient Management'
+      groupDescription: |-
+
+        APIs for managing ingredients
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: |-
+        *
+        * @response {
+        *   "status": 200,
+        *   "message": "Liste des ingrédients",
+        *   "ingredients": [
+        *      {"id": 1, "name": "Tomato", "quantity": "2 kg", "created_at": "2024-08-29", "updated_at": "2024-08-29"},
+        *      {"id": 2, "name": "Onion", "quantity": "1 kg", "created_at": "2024-08-29", "updated_at": "2024-08-29"}
+        *   ]
+        * }
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"status":200,"message":"Liste des ingr\u00e9dients","ingredients":[{"id":6,"name":"Elizabeth Byers","quantity":513,"created_at":"2024-08-29T22:19:04.000000Z","updated_at":"2024-08-29T22:19:04.000000Z"},{"id":7,"name":"Gareth Randolph","quantity":427,"created_at":"2024-08-29T22:19:04.000000Z","updated_at":"2024-08-29T22:19:04.000000Z"},{"id":5,"name":"Stone Mann","quantity":305,"created_at":"2024-08-29T16:07:55.000000Z","updated_at":"2024-08-29T16:07:55.000000Z"},{"id":3,"name":"Rogan Ross","quantity":123,"created_at":"2024-08-29T16:06:52.000000Z","updated_at":"2024-08-29T16:06:52.000000Z"},{"id":4,"name":"Brody Baldwin","quantity":908,"created_at":"2024-08-29T16:06:52.000000Z","updated_at":"2024-08-29T16:06:52.000000Z"},{"id":1,"name":"2 lb thin sliced chicken breasts","quantity":"1 g","created_at":"2024-08-27T22:09:29.000000Z","updated_at":"2024-08-27T22:09:29.000000Z"},{"id":2,"name":"chicken broth","quantity":"3\/4","created_at":"2024-08-27T22:09:29.000000Z","updated_at":"2024-08-27T22:09:29.000000Z"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          x-ratelimit-limit: '0'
+          x-ratelimit-remaining: '-2'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/ingredients
+    metadata:
+      groupName: 'Ingredient Management'
+      groupDescription: |-
+
+        APIs for managing ingredients
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'The name of the ingredient.'
+        required: true
+        example: Tomato
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      quantity:
+        name: quantity
+        description: 'The quantity of the ingredient.'
+        required: true
+        example: '2 kg'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      name: Tomato
+      quantity: '2 kg'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+          "status": 201,
+          "message": "Recipe add successfully",
+          "ingredient": {
+          "id": 1,
+          "name": "Tomato",
+          "quantity": "2 kg",
+          "created_at": "2024-08-29",
+          "updated_at": "2024-08-29"
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+           "status": 400,
+           "message": "Bad Request",
+           "errors": {
+           "name": ["The name field is required."],
+           "quantity": ["The quantity field is required."]
+           }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/ingredients/{id}'
+    metadata:
+      groupName: 'Ingredient Management'
+      groupDescription: |-
+
+        APIs for managing ingredients
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the ingredient.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "message": "Liste des ingrédients",
+          "ingredient": {
+          "id": 1,
+          "name": "Tomato",
+          "quantity": "2 kg",
+          "created_at": "2024-08-29",
+          "updated_at": "2024-08-29"
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/ingredients/{id}'
+    metadata:
+      groupName: 'Ingredient Management'
+      groupDescription: |-
+
+        APIs for managing ingredients
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the ingredient.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'The name of the ingredient.'
+        required: true
+        example: Tomato
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      quantity:
+        name: quantity
+        description: 'The quantity of the ingredient.'
+        required: true
+        example: '2 kg'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      name: Tomato
+      quantity: '2 kg'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+          "status": 201,
+          "message": "Recipe update successfully",
+          "ingredient": {
+          "id": 1,
+          "name": "Tomato",
+          "quantity": "2 kg",
+          "created_at": "2024-08-29",
+          "updated_at": "2024-08-29"
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+          "status": 400,
+          "message": "Bad Request",
+          "errors": {
+          "name": ["The name field is required."],
+          "quantity": ["The quantity field is required."]
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/ingredients/{id}'
+    metadata:
+      groupName: 'Ingredient Management'
+      groupDescription: |-
+
+        APIs for managing ingredients
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the ingredient.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: |-
+          {
+          "status": 204,
+          "message": "Your ingredient have been deleted with successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
