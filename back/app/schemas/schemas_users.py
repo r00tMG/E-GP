@@ -42,17 +42,6 @@ class SpecialItemResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class ReservationResponse(BaseModel):
-    id: int
-    annonce: Optional[AnnonceResponse] = None
-    total_price: Optional[float] = None
-    status: Optional[str] = None
-    items: List[ReservationItemResponse] = []
-    special_items: List[SpecialItemResponse] = []
-
-    class Config:
-        from_attributes = True
-
 
 class AnnonceResponse(BaseModel):
     id: int
@@ -64,6 +53,17 @@ class AnnonceResponse(BaseModel):
     prix_par_piece: Optional[float] = None
     origin: Optional[str] = None
     destination: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+class ReservationResponse(BaseModel):
+    id: int
+    annonce: Optional[AnnonceResponse] = None
+    total_price: Optional[float] = None
+    status: Optional[str] = None
+    items: List[ReservationItemResponse] = []
+    special_items: List[SpecialItemResponse] = []
+
     class Config:
         from_attributes = True
 
