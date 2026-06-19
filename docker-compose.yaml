@@ -2,7 +2,7 @@ services:
   db:
     image: postgres:15
     container_name: gp_postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-gp_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gp_pass}
@@ -26,11 +26,12 @@ services:
       - gp-net
     ports:
       - '5050:80'
+    restart: unless-stopped
 
   backend:
     build: ./back/
     container_name: gp_backend
-    restart: always
+    restart: unless-stopped
     env_file:
       - .env
     ports:
