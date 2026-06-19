@@ -143,6 +143,7 @@ async def show(
         db: Session = Depends(get_db),
         current_user=Depends(get_current_user)
 ):
+    print(f"Id reservations: {id}")
     reservations = (db.query(models.Reservation).join(models.Annonce)
     .options(
         joinedload(models.Reservation.user),
@@ -150,7 +151,8 @@ async def show(
                 joinedload(models.Annonce.gp),
             joinedload(models.Reservation.items),
             joinedload(models.Reservation.special_items)
-    ).filter(models.Reservation.user_id == current_user.id and models.Reservation.id == id)).first()
+    ).filter(models.Reservation.user_id == current_user.id or models.Reservation.id == id)).first()
+    print(f"reservation id : {reservations.id}")
 
     return {
         "status": status.HTTP_200_OK,

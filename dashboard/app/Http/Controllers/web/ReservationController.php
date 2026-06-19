@@ -73,6 +73,7 @@ class ReservationController extends Controller
      */
     public function show(FastApiService $api, $id)
     {
+        #dd($id);
         try {
             $response = $api->get('/reservation/'.$id);
             #dd($response->json());

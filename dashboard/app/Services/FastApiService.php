@@ -19,6 +19,7 @@ class FastApiService
 
     public function get($endpoint)
     {
+        #dd($endpoint);
         return Http::withToken(
             session('api_token')
         )->get(
