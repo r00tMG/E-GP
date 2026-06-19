@@ -1,7 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, Request, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from starlette import status
 
 from app.databases.database import get_db
@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/users", response_model=UserResponseIndex)
 async def index(request:Request, db:Session=Depends(get_db)):
-    users = db.query(models.User).all()
+    users = db.query(models.User).options(joinedload(models.User.reservations), joinedload(models.User.annonces)).all()
     return {
         "status":status.HTTP_200_OK,
         "message": "La liste des utilisateurs",
