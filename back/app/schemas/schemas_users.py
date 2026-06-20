@@ -93,7 +93,13 @@ class UserResponseShow(BaseModel):
 
 class UserUpdateSchemas(BaseModel):
     email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     password: Optional[str] = None
     confirm_password: Optional[str] = None
     phone: Optional[str] = None
     role: Optional[UserRole] = None
+
+class UserDeleteSchemaResponce(BaseModel):
+    status: int
+    message: str
