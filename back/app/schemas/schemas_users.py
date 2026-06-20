@@ -3,6 +3,9 @@ from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr, Field
 
+from app.models.models import UserRole
+
+
 class UserUpdateSchemas(BaseModel):
     role: str = Field(...)
 
@@ -83,3 +86,14 @@ class UserResponseIndex(BaseModel):
     class Config:
         from_attributes = True
 
+class UserResponseShow(BaseModel):
+    status: int
+    message: str
+    user: UserResponseIn
+
+class UserUpdateSchemas(BaseModel):
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    confirm_password: Optional[str] = None
+    phone: Optional[str] = None
+    role: Optional[UserRole] = None
