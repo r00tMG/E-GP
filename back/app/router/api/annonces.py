@@ -26,7 +26,7 @@ async def create(
         request: Request,
         payload: AnnonceCreateSchemas,
         db: Session = Depends(get_db),
-        currentUser: TokenData = Depends(role_required("gp"))
+        currentUser: TokenData = Depends(role_required("gp", "admin"))
 ):
     if (
             not payload.destination
@@ -86,7 +86,7 @@ async def delete(
         request: Request,
         id: int,
         db: Session = Depends(get_db),
-        currentUser: TokenData = Depends(role_required("gp"))
+        currentUser: TokenData = Depends(role_required("gp", "admin"))
 ):
     annonce = db.query(models.Annonce).filter(models.Annonce.id == id).first()
     if not annonce:
@@ -106,7 +106,8 @@ async def delete(
 async def show(
         request: Request,
         id: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+currentUser: TokenData = Depends(role_required("gp", "admin", "client"))
 ):
     print("test show")
     annonce = db.query(models.Annonce).filter(models.Annonce.id == id).first()
@@ -201,7 +202,7 @@ async def index(
         search_origin: Optional[str] = Query(None),
         search_destination: Optional[str] = Query(None),
         db: Session = Depends(get_db),
-        current_user=Depends(get_current_user)
+        current_user: TokenData =Depends(role_required("gp", "client"))
 
 ):
     now = datetime.utcnow()

@@ -16,7 +16,7 @@ router = APIRouter(tags=["Users"])
 
 
 @router.get("/users", response_model=UserResponseIndex)
-async def index(request:Request, db:Session=Depends(get_db)):
+async def index(request:Request, db:Session=Depends(get_db), currentUser: TokenData=Depends(role_required("admin"))):
     users = db.query(models.User).options(joinedload(models.User.reservations), joinedload(models.User.annonces)).all()
     return {
         "status":status.HTTP_200_OK,

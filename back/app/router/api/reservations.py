@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta, timezone
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session, joinedload
 
 from app.databases.database import get_db
 from app.models import models
+from app.schemas.schemas_annonce_create import AnnonceDeleteSchemaResponce
+from app.schemas.schemas_jwt_token import TokenData
 from app.schemas.schemas_reservation_create import ReservationCreate, ReservationSchemaResponse, ReservationSchemaData, \
     AnnonceBase
 from app.schemas.schemas_users import UserResponse
@@ -176,6 +178,26 @@ async def index(db: Session = Depends(get_db), current_user=Depends(role_require
         "reservation": reservations
     }
 
+@router.post("/reservation/{id}", response_model=AnnonceDeleteSchemaResponce)
+async def delete(
+        request: Request,
+        id: int,
+        db: Session = Depends(get_db),
+        currentUser: TokenData = Depends(role_required("gp", "admin", "client"))
+):
+    reservation = db.query(models.Reservation).filter(models.Reservation.id == id).first()
+    if not reservation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Une reservation avec cet id={id} n'existe pas"
+        )
+    test = db.delete(reservation)
+    print(f"test: {test}")
+    #db.commit()
+    return {
+        "status": status.HTTP_204_NO_CONTENT,
+        "message": "Reservation supprimée avec succées"
+    }
 
 def release_expired_reservations(db: Session=Depends(get_db)):
     now = datetime.now(timezone.utc)
@@ -194,3 +216,5 @@ def release_expired_reservations(db: Session=Depends(get_db)):
             db.add(r)
         except Exception as e:
             print("Erreur lors du release:", e)
+
+
