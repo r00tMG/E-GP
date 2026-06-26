@@ -178,25 +178,84 @@ async def index(db: Session = Depends(get_db), current_user=Depends(role_require
         "reservation": reservations
     }
 
+# @router.post("/reservation/{id}", response_model=AnnonceDeleteSchemaResponce)
+# async def delete(
+#         request: Request,
+#         id: int,
+#         db: Session = Depends(get_db),
+#         currentUser: TokenData = Depends(role_required("gp", "admin", "client"))
+# ):
+#     reservation = db.query(models.Reservation).filter(models.Reservation.id == id).first()
+#     if not reservation:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail=f"Une reservation avec cet id={id} n'existe pas"
+#         )
+#     test = db.delete(reservation)
+#     print(f"test: {test}")
+#     #db.commit()
+#     return {
+#         "status": status.HTTP_204_NO_CONTENT,
+#         "message": "Reservation supprimée avec succées"
+#     }
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlalchemy.orm import Session, joinedload
+
 @router.post("/reservation/{id}", response_model=AnnonceDeleteSchemaResponce)
 async def delete(
-        request: Request,
-        id: int,
-        db: Session = Depends(get_db),
-        currentUser: TokenData = Depends(role_required("gp", "admin", "client"))
+    request: Request,
+    id: int,
+    db: Session = Depends(get_db),
+    currentUser: TokenData = Depends(role_required("gp", "admin", "client"))
 ):
-    reservation = db.query(models.Reservation).filter(models.Reservation.id == id).first()
+    reservation = (
+        db.query(models.Reservation)
+        .options(
+            joinedload(models.Reservation.annonce),
+            joinedload(models.Reservation.items)
+        )
+        .filter(models.Reservation.id == id)
+        .first()
+    )
+
     if not reservation:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Une reservation avec cet id={id} n'existe pas"
+            detail=f"Une réservation avec id={id} n'existe pas"
         )
-    test = db.delete(reservation)
-    print(f"test: {test}")
-    #db.commit()
+
+    # Sécurité : vérifier que la réservation est bien liée à une annonce
+    if not reservation.annonce:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cette réservation n'est liée à aucune annonce."
+        )
+
+    # Additionne les kilos réservés dans les items
+    kilos_a_restaurer = sum(
+        item.weight or 0
+        for item in reservation.items
+    )
+
+    # Remet les kilos dans l'annonce
+    reservation.annonce.kilos_disponibles += kilos_a_restaurer
+
+    # Supprime la réservation
+    db.delete(reservation)
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erreur lors de la suppression de la réservation."
+        )
+
     return {
-        "status": status.HTTP_204_NO_CONTENT,
-        "message": "Reservation supprimée avec succées"
+        "status": status.HTTP_200_OK,
+        "message": f"Réservation supprimée. {kilos_a_restaurer} kg restauré(s) dans l'annonce."
     }
 
 def release_expired_reservations(db: Session=Depends(get_db)):

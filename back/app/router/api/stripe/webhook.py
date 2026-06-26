@@ -123,10 +123,19 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             reservation = db.query(models.Reservation).filter(
                 models.Reservation.id == payment.reservation_id
             ).first()
+            annonce = db.query(models.Annonce).filter(
+                models.Annonce.id == reservation.annonce_id
+            ).first()
+            kilos_reserved = sum(
+                item.weight or 0
+                for item in reservation.items
+            )
 
             if reservation:
                 print("test webhook 7")
                 reservation.status = models.StatusReservation.CONFIRMED
+                annonce.kilos_disponibles = annonce.kilos_disponibles - kilos_reserved
+                print(f"Kilo restant = {annonce.kilos_disponibles}")
 
             db.commit()
 
