@@ -48,6 +48,23 @@ services:
     command: >
       bash -c  "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
+    dashboard:
+      build:
+        context: ./dashboard/
+      container_name: gp_dashboard
+      restart: unless-stopped
+      ports:
+        - "8080:8000"
+      volumes:
+        - ./dashboard:/var/www/html
+      working_dir: /var/www/html
+      depends_on:
+        - backend
+      networks:
+        - gp-net
+      command: >
+        php artisan serve --host=0.0.0.0 --port=8000
+
 volumes:
   gp_data:
 networks:
