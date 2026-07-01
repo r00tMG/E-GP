@@ -63,7 +63,12 @@ services:
     networks:
       - gp-net
     command: >
-      php artisan serve --host=0.0.0.0 --port=8000
+      sh -c "
+        if [ ! -d vendor ]; then
+          composer install;
+        fi &&
+        php artisan serve --host=0.0.0.0 --port=8000
+      "
 
 volumes:
   gp_data:
