@@ -43,11 +43,11 @@ async def create(
     kilos_dispo = float(annonce.kilos_disponibles or 0)
     print("Kilo disponible: ", kilos_dispo)
     if total_kilos_requested > kilos_dispo:
-        raise HTTPException(status_code=400, detail=f"Pas assez de kilos disponibles. Disponibles: {kilos_dispo}")
+        raise HTTPException(status_code=400, detail=f"Pas assez de kilos disponibles. Disponibles: {kilos_dispo} kg")
 
     # Décrémenter les kilos disponibles immédiatement (hold)
-    annonce.kilos_disponibles = kilos_dispo - total_kilos_requested
-    db.add(annonce)  # persister changement dans la transaction
+    #annonce.kilos_disponibles = kilos_dispo - total_kilos_requested
+    #db.add(annonce)  # persister changement dans la transaction
 
     # Créer la réservation
     reservation = models.Reservation(

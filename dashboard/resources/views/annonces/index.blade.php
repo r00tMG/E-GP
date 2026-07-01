@@ -16,14 +16,14 @@
     <div class="row">
         <div class="col-md-12">
             @if(Session::has("success"))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                     <strong class="text-center">{{ Session::get("success") }}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
                 </div>
             @endif
 
             @if(Session::has("error"))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                     <strong class="text-center">{{ Session::get("error") }}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"></button>
                 </div>
@@ -33,7 +33,6 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-
                     <div class="d-flex justify-content-between align-items my-3">
                         <h6 class="card-title">Annnonces</h6>
                         <a href="{{route('annonces.create')}}" class="btn btn-primary">New Annonces</a>
@@ -47,6 +46,7 @@
                                 <th>Arrivée</th>
                                 <th>Date Départ</th>
                                 <th>Date Arrivée</th>
+                                <th>Disponibilité</th>
                                 <th class="no-sort">Actions</th>
                             </tr>
                             </thead>
@@ -54,11 +54,10 @@
                             @if($annonces)
                                 @foreach($annonces['annonces'] as $annonce)
                                     <tr>
-                                        <td >
+                                        <td>
                                             <a class="btn btn-sm btn-transparent border border-primary circle" href="#">
                                                 <img src="#" alt="Profile" >{{$annonce['gp']['email']}}
                                             </a>
-
                                         </td>
                                         <td>{{$annonce['origin']}}</td>
                                         <td>{{$annonce['destination']}}</td>
@@ -68,15 +67,11 @@
                                         <td>
                                             <div class="badge bg-primary">{{$annonce['date_arrivee']}}</div>
                                         </td>
-                                        {{--
-                                            <i data-feather="eye" class="icon-sm me-2"></i>
-                                            <i data-feather="edit-2" class="icon-sm me-2"></i>
-                                            <i data-feather="trash" class="icon-sm me-2"></i>
-                                            <i data-feather="printer" class="icon-sm me-2"></i>
-                                            <i data-feather="download" class="icon-sm me-2"></i>
-                                            --}}
+                                        <td>
+                                            <div class="badge bg-danger ">{{$annonce['kilos_disponibles']}}</div>
+                                        </td>
                                         <td class="actions">
-                                            <form action="{{route("annonces.destroy", $annonce['id'])}}" method="POST">
+                                            <form action="{{ route( "annonces.destroy", $annonce['id'])}} " method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-sm btn-danger circle">
@@ -84,7 +79,6 @@
                                                 </button>
                                             </form>
                                             <a class="btn btn-sm btn-success circle" href="{{route('annonces.edit', $annonce['id'])}}">
-{{--                                                <i data-feather="edit"></i>--}}
                                                 <i data-feather="edit-2" class="icon-sm"></i>
                                             </a>
                                             <a class="btn btn-sm btn-warning circle" href="{{route('annonces.show', $annonce['id'])}}">

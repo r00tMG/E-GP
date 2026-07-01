@@ -43,13 +43,30 @@ class ReservationController extends Controller
     }
     public function store(Request $request,FastApiService $api){
         #dd($request->all());
+        $items = collect($request->kilos)
+        ->filter(fn ($item) =>
+            !empty($item['item_name']) &&
+            !empty($item['weight'])
+        )
+        ->values()
+        ->toArray();
+
+        $specialItems = collect($request->specials)
+            ->filter(fn ($item) =>
+                !empty($item['item_name']) &&
+                !empty($item['quantity'])
+            )
+            ->values()
+            ->toArray();
+
         $payload = [
-                'annonce_id'=>$request->annonce_id,
-                'items'=>$request->kilos,
-                'special_items'=>$request->specials,
+            'annonce_id' => (int) $request->annonce_id,
+            'items' => $items,
+            'special_items' => $specialItems,
         ];
         #dd($payload);
         $response = $api->post('/reservations', $payload);
+        
         #dd($response);
         $data = $response->json();
         #dd($data);
@@ -172,7 +189,7 @@ class ReservationController extends Controller
     {
         try {
 
-            $response = $api->delete('/annonce/'.$id);
+            $response = $api->delete('/reservation/'.$id);
             #dd($response->json());
             if (!$response->successful()) {
 
@@ -182,8 +199,8 @@ class ReservationController extends Controller
             }
 
             $res = $response->json();
-            #dd($res['annonce']);
-            return to_route('annonces.index')->with('success', "Annonce supprimée avec succés");
+            #dd($res);
+            return to_route('reservations.index')->with('success', "Reservation supprimée avec succés");
 
         } catch (\Exception $e) {
 

@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Date Arrivée</label>
-                                <input type="datetime-local" class="form-control border-primary" readonly
+                                <input class="form-control border-primary" readonly
                                        value="{{\Carbon\Carbon::parse($reservation["annonce"]['date_arrivee'])->format('d/m/Y à H:i')}}"/>
                             </div>
                         </div>

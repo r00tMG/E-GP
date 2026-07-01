@@ -60,6 +60,7 @@
                                             <a class="btn btn-sm btn-transparent border border-primary circle" href="#">
                                                 <img src="#" alt="Profile" >{{$reservation['annonce']['gp']['email']}}
                                             </a>
+                                        {{$reservation['id']}}
                                         <td>
                                             <a class="btn btn-sm btn-transparent border border-primary circle" href="#">
                                                 <img src="#" alt="Profile" >{{$reservation['user']['email']}}
