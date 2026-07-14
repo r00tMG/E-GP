@@ -45,7 +45,7 @@
               <a href="{{ url('/email/inbox') }}" class="dropdown-item d-flex flex-column align-items-center justify-content-center wd-70 ht-70"><i data-feather="mail" class="icon-lg mb-1"></i><p class="tx-12">Email</p></a>
             </div>
             <div class="col-3 text-center">
-              <a href="{{ url('/general/profile') }}" class="dropdown-item d-flex flex-column align-items-center justify-content-center wd-70 ht-70"><i data-feather="instagram" class="icon-lg mb-1"></i><p class="tx-12">Profile</p></a>
+              <a href="{{ route('profile') }}" class="dropdown-item d-flex flex-column align-items-center justify-content-center wd-70 ht-70"><i data-feather="instagram" class="icon-lg mb-1"></i><p class="tx-12">Profile</p></a>
             </div>
           </div>
           <div class="px-3 py-2 d-flex align-items-center justify-content-center border-top">
@@ -209,7 +209,7 @@
           </div>
           <ul class="list-unstyled p-1">
             <li class="dropdown-item py-2">
-              <a href="{{ url('/general/profile') }}" class="text-body ms-0">
+              <a href="{{ route('profile') }}" class="text-body ms-0">
                 <i class="me-2 icon-md" data-feather="user"></i>
                 <span>Profile</span>
               </a>
@@ -228,7 +228,7 @@
             </li>
               <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                @method('DELETE')
+                @method('POST')
                 <li class="dropdown-item py-2">
                   <button type="submit" class="text-body ms-0 bg-transparent border-0 p-0">
                     <i class="me-2 icon-md" data-feather="log-out"></i>

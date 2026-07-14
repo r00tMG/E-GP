@@ -21,6 +21,15 @@ class User(Base):
     password = Column(String)
     role = Column(Enum(UserRole))
     stripe_account_id=Column(String, nullable=True)
+
+    # Profil
+    avatar = Column(String, nullable=True)
+    birth_date = Column(DateTime, nullable=True)
+    country = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    address = Column(String, nullable=True)
+    bio = Column(String, nullable=True)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     #Relations

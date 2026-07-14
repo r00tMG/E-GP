@@ -39,7 +39,9 @@ Route::middleware(['guest'])->group(function (){
 
     Route::get('register',[AuthController::class,'register'])
         ->name('register');
-
+        
+    Route::post('logout',[AuthController::class,'logout'])
+        ->name('logout');
 
     Route::get('auth/google',[AuthController::class,'redirectToGoogle'])->name('google');
     Route::get('callback/google',[AuthController::class,'handleCallBack']);
@@ -58,7 +60,7 @@ Route::middleware(['guest'])->group(function (){
     Route::get("/stripe/create-checkout-session", [\App\Http\Controllers\web\PaiementController::class, 'stripe'])->name('paiements.stripe');
     Route::get('/payment-success', [\App\Http\Controllers\web\PaiementController::class, 'success']);
     Route::get('/payment-cancel', [\App\Http\Controllers\web\PaiementController::class, 'cancel']);
-    #Route::resource('ingredients', IngredientController::class)->middleware('auth');
+    Route::get('/profile', [\App\Http\Controllers\web\ProfileController::class, 'index'])->name('profile');
 
     #Route::resource('categories', CategoryController::class)->middleware('auth');
 
@@ -82,9 +84,6 @@ Route::middleware(['guest'])->group(function (){
     Route::get('apikeys/{apikey}/edit',[\App\Http\Controllers\MaintenanceController::class,'editApiKey'])->name('apikeys.edit');
     Route::put('apikeys/{apikey}',[\App\Http\Controllers\MaintenanceController::class,'updateApiKey'])->name('apikeys.update');
 
-    Route::delete('logout',[AuthController::class,'logout'])
-        ->middleware('auth')
-        ->name('logout');
 #});
 
 

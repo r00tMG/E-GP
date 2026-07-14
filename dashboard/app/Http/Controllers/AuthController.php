@@ -131,23 +131,13 @@ class AuthController extends Controller
     }
 
 
-//    public function doLogin(LoginForm $request)
-//    {
-//        logger('Salut');
-//        $credentials = $request->validated();
-//        //dd($credentials);
-//        if (Auth::attempt($credentials)){
-//            $request->session()->regenerate();
-//            return redirect()->intended(route('dashboard'));
-//        }
-//        return back()->withErrors([
-//            "email" => 'Identifiants incorrectes'
-//        ])->onlyInput('email');
-//    }
-
-    public function logout()
+    public function logout(FastApiService $api)
     {
-        Auth::logout();
-        return to_route('login')->with('success', 'Vous êtes bien déconnecté');
+        $response = $api->post('/logout');
+        session()->forget('api_token');
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'You have been logged out successfully.');
     }
 }

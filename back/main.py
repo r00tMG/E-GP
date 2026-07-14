@@ -49,6 +49,7 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY_MIDDLEWARE)
 #Guest
 app.include_router(register.router, prefix="/api")
 app.include_router(login.router, prefix="/api")
+app.include_router(logout.router, prefix="/api")
 app.include_router(home.router, prefix="/api")
 app.include_router(setRole.router, prefix="/api")
 
